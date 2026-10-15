@@ -1,0 +1,227 @@
+@import "tailwindcss";
+
+/*
+ * Direction artistique — variante A « solaire terre cuite » (maquettes/DA.dc.html).
+ * Le site est volontairement clair uniquement : pas de thème sombre.
+ */
+@theme {
+  /* Couleurs */
+  --color-terre: #b4502a;
+  --color-terre-fonce: #8f3d1e;
+  --color-terre-sombre: #5e2611;
+  --color-abricot: #f3b98c;
+  --color-abricot-clair: #f3c7a3;
+  --color-sable: #f6eee2;
+  --color-sable-chaud: #fbf1e6;
+  --color-pierre: #ead9bf;
+  --color-brun: #3a2418;
+  --color-brun-clair: #4b3224;
+  --color-nuit: #2b1d14;
+  --color-olive: #5c6a27;
+  --color-olive-clair: #c9d29a;
+  --color-indigo: #34409a;
+  --color-indigo-clair: #b7c0ee;
+  --color-ocre: #8a6a3c;
+
+  --color-encre: #2b1d14;
+  --color-encre-2: #4a3628;
+  --color-encre-3: #6b5646;
+  --color-bordure: #e4d3bb;
+  --color-bordure-champ: #d8c3a5;
+  --color-bordure-douce: #e2cdb0;
+  --color-erreur: #b42318;
+
+  /* Textes sur fonds sombres */
+  --color-creme: #e7d8c5;
+  --color-creme-2: #e0cfba;
+  --color-creme-3: #a8927c;
+
+  /* Étiquettes (fond / texte) */
+  --color-tag-terre: #f1dcc8;
+  --color-tag-terre-fg: #6e2e14;
+  --color-tag-olive: #dde3be;
+  --color-tag-olive-fg: #2e3512;
+  --color-tag-indigo: #d9ddf6;
+  --color-tag-indigo-fg: #1e255e;
+  --color-tag-ambre: #fbe3c0;
+  --color-tag-ambre-fg: #6b3f00;
+  --color-tag-neutre: #ece6dd;
+  --color-tag-neutre-fg: #4a3628;
+
+  /* Typographie */
+  --font-sans: var(--font-nunito), ui-sans-serif, system-ui, sans-serif;
+  --font-titre: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
+
+  /* Rayons */
+  --radius-champ: 14px;
+  --radius-carte: 22px;
+  --radius-carte-lg: 28px;
+
+  /* Conteneur */
+  --container-site: 1200px;
+
+  /* Animations */
+  --animate-pulse-vie: pulse-vie 2s ease-in-out infinite;
+  @keyframes pulse-vie {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.35;
+    }
+  }
+}
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 96px;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background: var(--color-sable);
+    color: var(--color-encre);
+    font-family: var(--font-sans);
+    font-size: 17px;
+    line-height: 1.6;
+  }
+
+  a {
+    color: var(--color-terre-fonce);
+  }
+  a:hover {
+    color: var(--color-terre-sombre);
+  }
+
+  /* Focus visible partout, contrasté sur fonds clairs et sombres. */
+  :focus-visible {
+    outline: 3px solid var(--color-indigo);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+  .sur-sombre :focus-visible {
+    outline-color: var(--color-abricot);
+  }
+
+  summary {
+    list-style: none;
+    cursor: pointer;
+  }
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  .conteneur {
+    width: 100%;
+    max-width: var(--container-site);
+    margin-inline: auto;
+    padding-inline: 20px;
+  }
+  @media (min-width: 768px) {
+    .conteneur {
+      padding-inline: 24px;
+    }
+  }
+
+  .surtitre {
+    margin: 0 0 12px;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-terre-fonce);
+  }
+
+  .titre-section {
+    margin: 0;
+    font-family: var(--font-titre);
+    font-weight: 600;
+    font-size: clamp(30px, 4vw, 52px);
+    line-height: 1.06;
+    letter-spacing: -0.02em;
+  }
+
+  /* Cartes : survol −3 px en 200 ms */
+  .carte {
+    transition:
+      transform 0.2s ease,
+      box-shadow 0.2s ease;
+  }
+  .carte:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 14px 30px rgb(58 36 24 / 0.14);
+  }
+
+  .bouton-anime {
+    transition:
+      transform 0.15s ease,
+      background-color 0.15s ease;
+  }
+  .bouton-anime:hover {
+    transform: translateY(-1px);
+  }
+
+  /* Texte riche (articles, réponses de FAQ) */
+  .prose-vtv > * + * {
+    margin-top: 1em;
+  }
+  .prose-vtv > :first-child {
+    margin-top: 0;
+  }
+  .prose-vtv h2 {
+    margin-top: 1.6em;
+    font-family: var(--font-titre);
+    font-size: 30px;
+    font-weight: 600;
+    line-height: 1.15;
+  }
+  .prose-vtv h3 {
+    margin-top: 1.4em;
+    font-family: var(--font-titre);
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 1.2;
+  }
+  .prose-vtv ul,
+  .prose-vtv ol {
+    padding-left: 1.3em;
+  }
+  .prose-vtv ul {
+    list-style: disc;
+  }
+  .prose-vtv ol {
+    list-style: decimal;
+  }
+  .prose-vtv li + li {
+    margin-top: 0.35em;
+  }
+  .prose-vtv blockquote {
+    border-left: 4px solid var(--color-terre);
+    padding: 4px 0 4px 22px;
+    font-family: var(--font-titre);
+    font-size: 24px;
+    line-height: 1.35;
+    color: var(--color-terre-fonce);
+  }
+}
