@@ -26,7 +26,7 @@ Studio (interface de la base) : http://127.0.0.1:54323
 
 | Commande | Rôle |
 |---|---|
-| `npm run db:reset` | Recrée la base locale (migrations + `supabase/seed.sql`) |
+| `npm run db:reset` | Recrée la base locale (migrations + `supabase/seeds/*.sql`) |
 | `npm run db:types` | Régénère `src/lib/supabase/types.ts` après une migration |
 | `npm run typecheck` | Vérifie les types |
 | `npm run lint` | ESLint |
@@ -43,7 +43,8 @@ src/components/ui/     boutons, étiquettes
 src/lib/data/          lectures publiques mises en cache ('use cache' + cacheTag)
 src/lib/supabase/      clients Supabase et types générés
 supabase/migrations/   schéma SQL versionné (RLS)
-supabase/seed.sql      contenus initiaux (réels + exemples fictifs marqués is_sample)
+supabase/seeds/        contenus initiaux, appliqués dans l'ordre (01 contenus, 02 statuts, 03 glossaire et veille) ;
+                       exemples fictifs marqués is_sample
 ```
 
 ## Cache et publication
@@ -53,11 +54,22 @@ Les pages publiques sont pré-rendues. Chaque lecture de contenu est mise en cac
 actualise les dates relatives « dans 9 jours ») et une étiquette (`articles`, `evenements`…)
 que l'administration invalide à chaque publication.
 
+> **Développement** : si une modification n'apparaît pas (CSS ou module partagé), arrêter `npm run dev`,
+> supprimer le dossier `.next` puis relancer. Le cache disque de Turbopack peut manquer certaines modifications.
+
+## Fichiers générés
+
+- `/statuts/statuts-vtv.pdf` : PDF des statuts produit depuis la base (`src/lib/pdf/statuts.tsx`),
+  mis en cache et régénéré quand les statuts changent ; il servira aussi de pièce jointe à l'e-mail de bienvenue.
+- `/evenements/[slug]/agenda.ics` : fichier agenda (iCalendar) de chaque événement daté.
+
 ## Sécurité
 
 - RLS activée partout : le public ne lit que le contenu publié ; aucune écriture directe possible
   avec la clé publique. Les écritures publiques passent par des Server Actions validées (Zod,
   champ piège, limitation de débit).
+- Limitation de débit dans Postgres (`hit_rate_limit`) avec des clés HMAC (IP tronquée + navigateur, salées
+  par `ANTI_ABUS_SEL`) : aucune adresse IP n'est stockée en clair.
 - Les inscriptions publiques de comptes sont désactivées ; les admins sont invités par le superadmin.
 - Aucun secret dans le dépôt : `.env.local` est ignoré par git.
 

@@ -21,7 +21,7 @@ export async function Footer() {
   ].filter((x): x is typeof x & { url: string } => Boolean(x.url));
 
   return (
-    <footer className="sur-sombre bg-nuit text-base text-creme">
+    <footer className="print:hidden sur-sombre bg-nuit text-base text-creme">
       <div className="conteneur grid gap-9 pb-8 pt-16 [grid-template-columns:repeat(auto-fit,minmax(220px,1fr))]">
         <div>
           <p className="mb-3 font-titre text-2xl font-medium leading-[1.1] text-white">

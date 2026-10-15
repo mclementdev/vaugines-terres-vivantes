@@ -8,4 +8,8 @@ export const TAGS = {
   evenements: "evenements",
   faq: "faq",
   idees: "idees",
+  statuts: "statuts",
+  glossaire: "glossaire",
+  veille: "veille",
+  commissions: "commissions",
 } as const;

@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { Accordeon } from "@/components/site/Accordeon";
 import { BoutonSoutien } from "@/components/site/BoutonSoutien";
 import { LienBouton } from "@/components/ui/Bouton";
 import { Etiquette } from "@/components/ui/Etiquette";
@@ -62,15 +63,7 @@ export function IdeesEtFaq({ bloc, idees, faq }: Props) {
           </h2>
           <div className="flex flex-col gap-2.5">
             {faq.map((q, i) => (
-              <details key={q.id} open={i === 0} className="group rounded-2xl bg-white px-[18px] py-4 md:rounded-[18px] md:px-[22px] md:py-[18px]">
-                <summary className="flex items-start justify-between gap-4 font-bold md:text-lg">
-                  {q.question}
-                  <span className="text-2xl leading-none text-terre transition-transform group-open:rotate-45" aria-hidden="true">
-                    +
-                  </span>
-                </summary>
-                <div className="prose-vtv mt-2.5 text-encre-2" dangerouslySetInnerHTML={{ __html: q.answer_html }} />
-              </details>
+              <Accordeon key={q.id} question={q.question} reponseHtml={q.answer_html} ouvert={i === 0} />
             ))}
           </div>
           <Link href="/faq" className="mt-[18px] inline-block py-2 font-bold">

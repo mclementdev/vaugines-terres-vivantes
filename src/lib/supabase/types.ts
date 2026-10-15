@@ -139,6 +139,20 @@ isOneToOne: false
                   Relationships: [
                     
                   ]
+                },"glossary_terms": {
+                  Row: {
+                    "categorie": Database["public"]['Enums']["glossary_category"],"created_at": string,"definition": string,"id": string,"published_at": string | null,"slug": string,"status": Database["public"]['Enums']["content_status"],"terme": string,"to_validate": boolean,"updated_at": string,"voir_aussi": (string)[]
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "categorie": Database["public"]['Enums']["glossary_category"],"created_at"?: string,"definition": string,"id"?: string,"published_at"?: string | null,"slug": string,"status"?: Database["public"]['Enums']["content_status"],"terme": string,"to_validate"?: boolean,"updated_at"?: string,"voir_aussi"?: (string)[]
+                  }
+                  Update: {
+                    "categorie"?: Database["public"]['Enums']["glossary_category"],"created_at"?: string,"definition"?: string,"id"?: string,"published_at"?: string | null,"slug"?: string,"status"?: Database["public"]['Enums']["content_status"],"terme"?: string,"to_validate"?: boolean,"updated_at"?: string,"voir_aussi"?: (string)[]
+                  }
+                  Relationships: [
+                    
+                  ]
                 },"home_blocks": {
                   Row: {
                     "content": NonNullable<Json>,"key": string,"updated_at": string
@@ -195,6 +209,20 @@ isOneToOne: false
                   Relationships: [
                     
                   ]
+                },"rate_limits": {
+                  Row: {
+                    "hits": number,"key": string,"window_start": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "hits"?: number,"key": string,"window_start": string
+                  }
+                  Update: {
+                    "hits"?: number,"key"?: string,"window_start"?: string
+                  }
+                  Relationships: [
+                    
+                  ]
                 },"site_settings": {
                   Row: {
                     "data": NonNullable<Json>,"id": number,"updated_at": string
@@ -205,6 +233,74 @@ isOneToOne: false
                   }
                   Update: {
                     "data"?: NonNullable<Json>,"id"?: number,"updated_at"?: string
+                  }
+                  Relationships: [
+                    
+                  ]
+                },"statuts_articles": {
+                  Row: {
+                    "body_html": string,"numero": number,"titre": string,"updated_at": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "body_html": string,"numero": number,"titre": string,"updated_at"?: string
+                  }
+                  Update: {
+                    "body_html"?: string,"numero"?: number,"titre"?: string,"updated_at"?: string
+                  }
+                  Relationships: [
+                    
+                  ]
+                },"veille_dossiers": {
+                  Row: {
+                    "article_id": string | null,"created_at": string,"featured": boolean,"id": string,"image_alt": string | null,"image_path": string | null,"intro": string,"is_sample": boolean,"published_at": string | null,"slug": string,"status": Database["public"]['Enums']["content_status"],"titre": string,"updated_at": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "article_id"?: string | null,"created_at"?: string,"featured"?: boolean,"id"?: string,"image_alt"?: string | null,"image_path"?: string | null,"intro": string,"is_sample"?: boolean,"published_at"?: string | null,"slug": string,"status"?: Database["public"]['Enums']["content_status"],"titre": string,"updated_at"?: string
+                  }
+                  Update: {
+                    "article_id"?: string | null,"created_at"?: string,"featured"?: boolean,"id"?: string,"image_alt"?: string | null,"image_path"?: string | null,"intro"?: string,"is_sample"?: boolean,"published_at"?: string | null,"slug"?: string,"status"?: Database["public"]['Enums']["content_status"],"titre"?: string,"updated_at"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "veille_dossiers_article_id_fkey"
+      columns: ["article_id"]
+isOneToOne: false
+      referencedRelation: "articles"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"veille_items": {
+                  Row: {
+                    "created_at": string,"date_info": string | null,"dossier_id": string | null,"id": string,"is_sample": boolean,"published_at": string | null,"resume": string,"source_label": string,"source_url": string | null,"status": Database["public"]['Enums']["content_status"],"theme": Database["public"]['Enums']["veille_theme"],"titre": string,"updated_at": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "created_at"?: string,"date_info"?: string | null,"dossier_id"?: string | null,"id"?: string,"is_sample"?: boolean,"published_at"?: string | null,"resume": string,"source_label": string,"source_url"?: string | null,"status"?: Database["public"]['Enums']["content_status"],"theme": Database["public"]['Enums']["veille_theme"],"titre": string,"updated_at"?: string
+                  }
+                  Update: {
+                    "created_at"?: string,"date_info"?: string | null,"dossier_id"?: string | null,"id"?: string,"is_sample"?: boolean,"published_at"?: string | null,"resume"?: string,"source_label"?: string,"source_url"?: string | null,"status"?: Database["public"]['Enums']["content_status"],"theme"?: Database["public"]['Enums']["veille_theme"],"titre"?: string,"updated_at"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "veille_items_dossier_id_fkey"
+      columns: ["dossier_id"]
+isOneToOne: false
+      referencedRelation: "veille_dossiers"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"veille_reports": {
+                  Row: {
+                    "created_at": string,"email": string | null,"id": string,"message": string,"treated_at": string | null,"url": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "created_at"?: string,"email"?: string | null,"id"?: string,"message": string,"treated_at"?: string | null,"url"?: string | null
+                  }
+                  Update: {
+                    "created_at"?: string,"email"?: string | null,"id"?: string,"message"?: string,"treated_at"?: string | null,"url"?: string | null
                   }
                   Relationships: [
                     
@@ -229,7 +325,10 @@ isOneToOne: false
                 }
           }
           Functions: {
-            "is_admin":
+            "hit_rate_limit":
+{ Args: { "p_key": string,"p_max": number,"p_window_seconds": number }; Returns: boolean
+                           },
+"is_admin":
 { Args: Record<PropertyKey, never>; Returns: boolean
                            },
 "is_superadmin":
@@ -243,7 +342,7 @@ isOneToOne: false
                            }
           }
           Enums: {
-            "admin_role": "superadmin"|"admin","content_status": "draft"|"published"|"trashed","faq_category": "association"|"adherer"|"cotisation"|"evenements"|"participer"|"donnees","idea_moderation": "pending"|"changes_requested"|"published"|"rejected","idea_progress": "proposee"|"etudiee"|"en_projet"|"realisee","idea_theme": "cadre_de_vie"|"eau"|"biodiversite"|"mobilite"|"patrimoine"|"energie"|"vivre_ensemble","ton": "terre"|"olive"|"indigo"|"abricot"
+            "admin_role": "superadmin"|"admin","content_status": "draft"|"published"|"trashed","faq_category": "association"|"adherer"|"cotisation"|"evenements"|"participer"|"donnees","glossary_category": "democratie"|"environnement"|"agriculture"|"association","idea_moderation": "pending"|"changes_requested"|"published"|"rejected","idea_progress": "proposee"|"etudiee"|"en_projet"|"realisee","idea_theme": "cadre_de_vie"|"eau"|"biodiversite"|"mobilite"|"patrimoine"|"energie"|"vivre_ensemble","ton": "terre"|"olive"|"indigo"|"abricot","veille_theme": "environnement"|"urbanisme"|"eau"|"energie"|"democratie_locale"
           }
           CompositeTypes: {
             [_ in never]: never
@@ -363,7 +462,7 @@ export const Constants = {
           }
         },"public": {
           Enums: {
-            "admin_role": ["superadmin", "admin"],"content_status": ["draft", "published", "trashed"],"faq_category": ["association", "adherer", "cotisation", "evenements", "participer", "donnees"],"idea_moderation": ["pending", "changes_requested", "published", "rejected"],"idea_progress": ["proposee", "etudiee", "en_projet", "realisee"],"idea_theme": ["cadre_de_vie", "eau", "biodiversite", "mobilite", "patrimoine", "energie", "vivre_ensemble"],"ton": ["terre", "olive", "indigo", "abricot"]
+            "admin_role": ["superadmin", "admin"],"content_status": ["draft", "published", "trashed"],"faq_category": ["association", "adherer", "cotisation", "evenements", "participer", "donnees"],"glossary_category": ["democratie", "environnement", "agriculture", "association"],"idea_moderation": ["pending", "changes_requested", "published", "rejected"],"idea_progress": ["proposee", "etudiee", "en_projet", "realisee"],"idea_theme": ["cadre_de_vie", "eau", "biodiversite", "mobilite", "patrimoine", "energie", "vivre_ensemble"],"ton": ["terre", "olive", "indigo", "abricot"],"veille_theme": ["environnement", "urbanisme", "eau", "energie", "democratie_locale"]
           }
         }
 } as const

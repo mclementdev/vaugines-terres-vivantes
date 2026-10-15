@@ -20,7 +20,7 @@ export function Header() {
   const actif = cleActive(chemin);
 
   return (
-    <header className="sticky top-0 z-30 border-b border-bordure bg-sable/95 backdrop-blur-sm">
+    <header className="print:hidden sticky top-0 z-30 border-b border-bordure bg-sable/95 backdrop-blur-sm">
       <div className="conteneur flex items-center justify-between gap-3 py-2.5 lg:py-3.5">
         <Logo className="lg:hidden" compact />
         <Logo className="hidden lg:flex" />

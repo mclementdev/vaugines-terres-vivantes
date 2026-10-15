@@ -19,6 +19,7 @@ export type Reglages = {
   reseaux: { facebook: string | null; instagram: string | null };
   chiffres: Record<"adherents" | "actions" | "rendez_vous" | "conseil", Chiffre>;
   signature_email: string;
+  statuts?: { fait_a: string; signataires: { nom: string; qualite: string }[] };
 };
 
 export async function getReglages(): Promise<Reglages> {

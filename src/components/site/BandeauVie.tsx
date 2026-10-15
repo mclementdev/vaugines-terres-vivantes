@@ -18,7 +18,7 @@ export async function BandeauVie() {
   const quand = relatif.charAt(0).toUpperCase() + relatif.slice(1);
 
   return (
-    <div className="sur-sombre bg-brun text-sm text-sable">
+    <div className="print:hidden sur-sombre bg-brun text-sm text-sable">
       <div className="conteneur flex items-center justify-center gap-x-4 py-2.5 md:gap-x-7">
         <span className="inline-flex min-w-0 items-center gap-2">
           <span className="inline-block size-2 shrink-0 animate-pulse-vie rounded-full bg-[#E9A06B]" aria-hidden="true" />

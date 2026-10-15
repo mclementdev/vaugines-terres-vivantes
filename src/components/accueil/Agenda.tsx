@@ -1,11 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import { CarteDate } from "@/components/site/CarteDate";
+import { LigneEvenement } from "@/components/evenements/LigneEvenement";
 import { LienBouton } from "@/components/ui/Bouton";
 import { Etiquette } from "@/components/ui/Etiquette";
 import type { EvenementResume } from "@/lib/data/contenus";
-import { dansCombien, heure, jour, plageHoraire } from "@/lib/dates";
+import { dansCombien, heure, jour } from "@/lib/dates";
 import { urlImage } from "@/lib/images";
 
 export function Agenda({ evenements }: { evenements: EvenementResume[] }) {
@@ -76,26 +76,7 @@ export function Agenda({ evenements }: { evenements: EvenementResume[] }) {
 
           <div className="flex min-w-0 flex-[1_1_340px] flex-col gap-3.5">
             {autres.map((e) => (
-              <Link
-                key={e.id}
-                href={`/evenements/${e.slug}`}
-                className="carte flex items-center gap-[18px] rounded-[20px] bg-white px-5 py-[18px] text-encre no-underline hover:text-encre"
-              >
-                <CarteDate date={e.starts_at} libelle={e.date_label} />
-                <span>
-                  <strong className="block text-lg leading-tight">{e.titre}</strong>
-                  <span className="text-[15px] text-encre-3">
-                    {e.starts_at ? (
-                      <>
-                        <span className="sr-only">{jour(e.starts_at)} · </span>
-                        {e.lieu} · {plageHoraire(e.starts_at, e.ends_at, e.all_day)}
-                      </>
-                    ) : (
-                      (e.date_label ?? "Date à confirmer")
-                    )}
-                  </span>
-                </span>
-              </Link>
+              <LigneEvenement key={e.id} e={e} />
             ))}
             <Link href="/evenements" className="self-start px-1 py-2 font-bold">
               Tout l&apos;agenda <span aria-hidden="true">→</span>

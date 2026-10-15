@@ -5,6 +5,8 @@ const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const nextConfig: NextConfig = {
   cacheComponents: true,
   partialPrefetching: true,
+  // Rendu PDF (statuts) exécuté tel quel par Node, hors bundle.
+  serverExternalPackages: ["@react-pdf/renderer"],
   cacheLife: {
     // Contenus éditoriaux : rafraîchis toutes les 5 min (contenus programmés,
     // dates relatives « dans 9 jours ») et immédiatement à chaque publication

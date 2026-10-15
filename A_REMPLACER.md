@@ -24,6 +24,21 @@ Liste tenue à jour à chaque lot. Les exemples fictifs des maquettes sont en ba
 | Programme et accessibilité de la balade | `[parcours à préciser]`, `[Préciser une option courte.]` |
 | Article « Appel à vos archives et photos » | Date de publication fictive (12 oct.) |
 | Idées de la boîte à idées | 5 idées publiées + 1 en attente, avec soutiens et commentaires fictifs |
+| Veille | Dossier « réchauffement climatique » (texte du dossier entre crochets) et 6 fiches : **dates et sources fictives** (`[Arrêté préfectoral]`…), sans lien |
+
+## Glossaire à valider (`to_validate = true`)
+
+Les 11 définitions reprises de la maquette sont provisoires : la mention « Définitions provisoires » disparaît quand toutes sont validées.
+
+## Statuts
+
+Le texte est repris **mot pour mot** du PDF signé (aucune correction du fond, puisqu'il s'agit du texte déposé). Coquilles relevées, à corriger seulement lors d'une prochaine AGE (art. 17) :
+
+- art. 2 : « bien être » → « bien-être » ; « alentours » → « alentour » ; « acteurs et actrices intervenants » → « intervenant »
+- art. 10 : « Le Conseil d'Orientation […] se réunissent » → « se réunit » ; « au moins de la moitié » → « au moins la moitié »
+- art. 6 : « renouvelable » → « renouvelables »
+
+Signature : le PDF indique « I-Charlotte Clément » ; le site affiche « Charlotte Clément » (à confirmer).
 
 ## Réponses de FAQ à valider (`to_validate = true`)
 

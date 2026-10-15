@@ -217,11 +217,85 @@
     margin-top: 0.35em;
   }
   .prose-vtv blockquote {
-    border-left: 4px solid var(--color-terre);
-    padding: 4px 0 4px 22px;
+    margin-block: 28px;
+    border-radius: 20px;
+    background: var(--color-pierre);
+    padding: 22px 26px;
     font-family: var(--font-titre);
     font-size: 24px;
+    font-weight: 500;
     line-height: 1.35;
+  }
+  .prose-vtv figure img {
+    width: 100%;
+    border-radius: 20px;
+  }
+  .prose-vtv figcaption {
+    margin-top: 8px;
+    font-size: 14px;
+    color: var(--color-encre-3);
+  }
+  /* Corps d'article (maquette Article) */
+  .prose-article {
+    font-size: 18px;
+  }
+  .prose-article h2 {
+    margin-top: 40px;
+    font-size: 28px;
+  }
+  .prose-article > * + * {
+    margin-top: 18px;
+  }
+}
+
+/* Articles des statuts (maquette Statuts, classe .art) */
+@layer components {
+  .article-statuts h2 {
+    margin: 0 0 10px;
+    font-family: var(--font-titre);
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 1.2;
+  }
+  .article-statuts h2 span {
+    margin-right: 8px;
+    font-weight: 500;
+    color: var(--color-terre);
+  }
+  .article-statuts p,
+  .article-statuts ul {
+    margin: 0 0 10px;
+  }
+  .article-statuts ul {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding-left: 22px;
+    list-style: disc;
+  }
+  .article-statuts .note {
+    font-size: 15px;
+    color: var(--color-encre-3);
+  }
+  /* Termes du glossaire : soulignés en pointillé, couleur du texte. */
+  a.terme {
+    color: inherit;
+    text-decoration: underline dotted var(--color-terre);
+    text-underline-offset: 4px;
+    text-decoration-thickness: 2px;
+  }
+  a.terme:hover {
     color: var(--color-terre-fonce);
+  }
+}
+
+/* Impression : seul le contenu utile. */
+@media print {
+  body {
+    background: #fff;
+    font-size: 11pt;
+  }
+  a.terme {
+    text-decoration: none;
   }
 }
