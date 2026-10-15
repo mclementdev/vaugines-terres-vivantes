@@ -43,6 +43,20 @@ isOneToOne: false
       referencedColumns: ["id"]
     }
                   ]
+                },"ag_periods": {
+                  Row: {
+                    "created_at": string,"ends_on": string | null,"id": string,"is_current": boolean,"label": string,"starts_on": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "created_at"?: string,"ends_on"?: string | null,"id"?: string,"is_current"?: boolean,"label": string,"starts_on": string
+                  }
+                  Update: {
+                    "created_at"?: string,"ends_on"?: string | null,"id"?: string,"is_current"?: boolean,"label"?: string,"starts_on"?: string
+                  }
+                  Relationships: [
+                    
+                  ]
                 },"articles": {
                   Row: {
                     "author_id": string | null,"author_label": string,"body_html": string,"body_json": Json | null,"category_id": string | null,"chapeau": string,"cover_alt": string | null,"cover_caption": string | null,"cover_path": string | null,"created_at": string,"featured": boolean,"id": string,"is_sample": boolean,"newsletter_candidate": boolean,"published_at": string | null,"slug": string,"status": Database["public"]['Enums']["content_status"],"tags": (string)[],"titre": string,"updated_at": string
@@ -116,6 +130,38 @@ isOneToOne: false
                   }
                   Relationships: [
                     
+                  ]
+                },"contributions": {
+                  Row: {
+                    "amount_cents": number | null,"created_at": string,"id": string,"last_reminder_at": string | null,"member_id": string,"mode": Database["public"]['Enums']["contribution_mode"],"paid_on": string | null,"payment_method": Database["public"]['Enums']["payment_method"] | null,"period_id": string,"reminders_count": number,"status": Database["public"]['Enums']["contribution_status"],"updated_at": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "amount_cents"?: number | null,"created_at"?: string,"id"?: string,"last_reminder_at"?: string | null,"member_id": string,"mode": Database["public"]['Enums']["contribution_mode"],"paid_on"?: string | null,"payment_method"?: Database["public"]['Enums']["payment_method"] | null,"period_id": string,"reminders_count"?: number,"status": Database["public"]['Enums']["contribution_status"],"updated_at"?: string
+                  }
+                  Update: {
+                    "amount_cents"?: number | null,"created_at"?: string,"id"?: string,"last_reminder_at"?: string | null,"member_id"?: string,"mode"?: Database["public"]['Enums']["contribution_mode"],"paid_on"?: string | null,"payment_method"?: Database["public"]['Enums']["payment_method"] | null,"period_id"?: string,"reminders_count"?: number,"status"?: Database["public"]['Enums']["contribution_status"],"updated_at"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "contributions_member_id_fkey"
+      columns: ["member_id"]
+isOneToOne: false
+      referencedRelation: "adherents_vue"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "contributions_member_id_fkey"
+      columns: ["member_id"]
+isOneToOne: false
+      referencedRelation: "members"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "contributions_period_id_fkey"
+      columns: ["period_id"]
+isOneToOne: false
+      referencedRelation: "ag_periods"
+      referencedColumns: ["id"]
+    }
                   ]
                 },"council_members": {
                   Row: {
@@ -200,6 +246,104 @@ isOneToOne: false
                   }
                   Relationships: [
                     
+                  ]
+                },"member_history": {
+                  Row: {
+                    "actor_id": string | null,"created_at": string,"detail": NonNullable<Json>,"event": string,"id": number,"member_id": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "actor_id"?: string | null,"created_at"?: string,"detail"?: NonNullable<Json>,"event": string,"id"?: never,"member_id": string
+                  }
+                  Update: {
+                    "actor_id"?: string | null,"created_at"?: string,"detail"?: NonNullable<Json>,"event"?: string,"id"?: never,"member_id"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "member_history_actor_id_fkey"
+      columns: ["actor_id"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "member_history_member_id_fkey"
+      columns: ["member_id"]
+isOneToOne: false
+      referencedRelation: "adherents_vue"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "member_history_member_id_fkey"
+      columns: ["member_id"]
+isOneToOne: false
+      referencedRelation: "members"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"member_private": {
+                  Row: {
+                    "birth_date": string | null,"member_id": string,"phone": string | null,"updated_at": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "birth_date"?: string | null,"member_id": string,"phone"?: string | null,"updated_at"?: string
+                  }
+                  Update: {
+                    "birth_date"?: string | null,"member_id"?: string,"phone"?: string | null,"updated_at"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "member_private_member_id_fkey"
+      columns: ["member_id"]
+isOneToOne: true
+      referencedRelation: "adherents_vue"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "member_private_member_id_fkey"
+      columns: ["member_id"]
+isOneToOne: true
+      referencedRelation: "members"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"members": {
+                  Row: {
+                    "adresse": string | null,"ag_validated_on": string | null,"code_postal": string | null,"commune": string | null,"consent_donnees_at": string | null,"consent_statuts_at": string | null,"created_at": string,"email": string | null,"id": string,"is_sample": boolean,"joined_at": string,"nom": string,"notes": string | null,"prenom": string,"source": Database["public"]['Enums']["member_source"],"updated_at": string,"welcome_sent_at": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "adresse"?: string | null,"ag_validated_on"?: string | null,"code_postal"?: string | null,"commune"?: string | null,"consent_donnees_at"?: string | null,"consent_statuts_at"?: string | null,"created_at"?: string,"email"?: string | null,"id"?: string,"is_sample"?: boolean,"joined_at"?: string,"nom": string,"notes"?: string | null,"prenom": string,"source"?: Database["public"]['Enums']["member_source"],"updated_at"?: string,"welcome_sent_at"?: string | null
+                  }
+                  Update: {
+                    "adresse"?: string | null,"ag_validated_on"?: string | null,"code_postal"?: string | null,"commune"?: string | null,"consent_donnees_at"?: string | null,"consent_statuts_at"?: string | null,"created_at"?: string,"email"?: string | null,"id"?: string,"is_sample"?: boolean,"joined_at"?: string,"nom"?: string,"notes"?: string | null,"prenom"?: string,"source"?: Database["public"]['Enums']["member_source"],"updated_at"?: string,"welcome_sent_at"?: string | null
+                  }
+                  Relationships: [
+                    
+                  ]
+                },"newsletter_subscribers": {
+                  Row: {
+                    "confirmation_sent_at": string | null,"confirmed_at": string | null,"created_at": string,"email": string,"id": string,"is_sample": boolean,"member_id": string | null,"source": string,"status": Database["public"]['Enums']["subscriber_status"],"token": string,"unsubscribed_at": string | null,"updated_at": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "confirmation_sent_at"?: string | null,"confirmed_at"?: string | null,"created_at"?: string,"email": string,"id"?: string,"is_sample"?: boolean,"member_id"?: string | null,"source"?: string,"status"?: Database["public"]['Enums']["subscriber_status"],"token"?: string,"unsubscribed_at"?: string | null,"updated_at"?: string
+                  }
+                  Update: {
+                    "confirmation_sent_at"?: string | null,"confirmed_at"?: string | null,"created_at"?: string,"email"?: string,"id"?: string,"is_sample"?: boolean,"member_id"?: string | null,"source"?: string,"status"?: Database["public"]['Enums']["subscriber_status"],"token"?: string,"unsubscribed_at"?: string | null,"updated_at"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "newsletter_subscribers_member_id_fkey"
+      columns: ["member_id"]
+isOneToOne: false
+      referencedRelation: "adherents_vue"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "newsletter_subscribers_member_id_fkey"
+      columns: ["member_id"]
+isOneToOne: false
+      referencedRelation: "members"
+      referencedColumns: ["id"]
+    }
                   ]
                 },"private_settings": {
                   Row: {
@@ -328,7 +472,21 @@ isOneToOne: false
                 }
           }
           Views: {
-            "ideas_public": {
+            "adherents_vue": {
+                  Row: {
+                    "adresse": string | null,"ag_validated_on": string | null,"amount_cents": number | null,"code_postal": string | null,"commune": string | null,"contribution_id": string | null,"email": string | null,"id": string | null,"is_current": boolean | null,"is_sample": boolean | null,"joined_at": string | null,"last_reminder_at": string | null,"lettre": Database["public"]['Enums']["subscriber_status"] | null,"mode": Database["public"]['Enums']["contribution_mode"] | null,"nom": string | null,"paid_on": string | null,"payment_method": Database["public"]['Enums']["payment_method"] | null,"period_id": string | null,"periode": string | null,"prenom": string | null,"reminders_count": number | null,"source": Database["public"]['Enums']["member_source"] | null,"status": Database["public"]['Enums']["contribution_status"] | null
+                  }
+                  ComputedFields: never
+                  Relationships: [
+                    {
+      foreignKeyName: "contributions_period_id_fkey"
+      columns: ["period_id"]
+isOneToOne: false
+      referencedRelation: "ag_periods"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"ideas_public": {
                   Row: {
                     "comment_count": number | null,"description": string | null,"display_name": string | null,"id": string | null,"is_sample": boolean | null,"photo_path": string | null,"progress": Database["public"]['Enums']["idea_progress"] | null,"published_at": string | null,"slug": string | null,"support_count": number | null,"theme": Database["public"]['Enums']["idea_theme"] | null,"titre": string | null
                   }
@@ -360,6 +518,19 @@ isOneToOne: false
 "is_visible":
 { Args: { "published_at": string,"s": Database["public"]['Enums']["content_status"] }; Returns: boolean
                            },
+"member_private_presence":
+{ Args: { "p_member_id": string }; Returns: {
+              "has_birth_date": boolean,"has_phone": boolean
+            }[]
+                           },
+"member_private_read":
+{ Args: { "p_member_id": string }; Returns: {
+              "birth_date": string,"phone": string
+            }[]
+                           },
+"member_private_write":
+{ Args: { "p_birth_date": string,"p_member_id": string,"p_phone": string }; Returns: undefined
+                           },
 "public_stats":
 { Args: Record<PropertyKey, never>; Returns: Json
                            },
@@ -368,7 +539,7 @@ isOneToOne: false
                            }
           }
           Enums: {
-            "admin_role": "superadmin"|"admin","content_status": "draft"|"published"|"trashed","faq_category": "association"|"adherer"|"cotisation"|"evenements"|"participer"|"donnees","glossary_category": "democratie"|"environnement"|"agriculture"|"association","idea_moderation": "pending"|"changes_requested"|"published"|"rejected","idea_progress": "proposee"|"etudiee"|"en_projet"|"realisee","idea_theme": "cadre_de_vie"|"eau"|"biodiversite"|"mobilite"|"patrimoine"|"energie"|"vivre_ensemble","ton": "terre"|"olive"|"indigo"|"abricot","veille_theme": "environnement"|"urbanisme"|"eau"|"energie"|"democratie_locale"
+            "admin_role": "superadmin"|"admin","content_status": "draft"|"published"|"trashed","contribution_mode": "avec"|"sans","contribution_status": "attendue"|"payee"|"sans","faq_category": "association"|"adherer"|"cotisation"|"evenements"|"participer"|"donnees","glossary_category": "democratie"|"environnement"|"agriculture"|"association","idea_moderation": "pending"|"changes_requested"|"published"|"rejected","idea_progress": "proposee"|"etudiee"|"en_projet"|"realisee","idea_theme": "cadre_de_vie"|"eau"|"biodiversite"|"mobilite"|"patrimoine"|"energie"|"vivre_ensemble","member_source": "en_ligne"|"papier","payment_method": "virement"|"especes"|"cheque"|"carte","subscriber_status": "pending"|"active"|"unsubscribed","ton": "terre"|"olive"|"indigo"|"abricot","veille_theme": "environnement"|"urbanisme"|"eau"|"energie"|"democratie_locale"
           }
           CompositeTypes: {
             [_ in never]: never
@@ -488,7 +659,7 @@ export const Constants = {
           }
         },"public": {
           Enums: {
-            "admin_role": ["superadmin", "admin"],"content_status": ["draft", "published", "trashed"],"faq_category": ["association", "adherer", "cotisation", "evenements", "participer", "donnees"],"glossary_category": ["democratie", "environnement", "agriculture", "association"],"idea_moderation": ["pending", "changes_requested", "published", "rejected"],"idea_progress": ["proposee", "etudiee", "en_projet", "realisee"],"idea_theme": ["cadre_de_vie", "eau", "biodiversite", "mobilite", "patrimoine", "energie", "vivre_ensemble"],"ton": ["terre", "olive", "indigo", "abricot"],"veille_theme": ["environnement", "urbanisme", "eau", "energie", "democratie_locale"]
+            "admin_role": ["superadmin", "admin"],"content_status": ["draft", "published", "trashed"],"contribution_mode": ["avec", "sans"],"contribution_status": ["attendue", "payee", "sans"],"faq_category": ["association", "adherer", "cotisation", "evenements", "participer", "donnees"],"glossary_category": ["democratie", "environnement", "agriculture", "association"],"idea_moderation": ["pending", "changes_requested", "published", "rejected"],"idea_progress": ["proposee", "etudiee", "en_projet", "realisee"],"idea_theme": ["cadre_de_vie", "eau", "biodiversite", "mobilite", "patrimoine", "energie", "vivre_ensemble"],"member_source": ["en_ligne", "papier"],"payment_method": ["virement", "especes", "cheque", "carte"],"subscriber_status": ["pending", "active", "unsubscribed"],"ton": ["terre", "olive", "indigo", "abricot"],"veille_theme": ["environnement", "urbanisme", "eau", "energie", "democratie_locale"]
           }
         }
 } as const

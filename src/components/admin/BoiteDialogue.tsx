@@ -31,6 +31,7 @@ export function BoiteDialogue({
           <Dialog.Title className="mb-4 font-titre text-2xl font-semibold">{titre}</Dialog.Title>
           <Dialog.Description className="sr-only">{titre}</Dialog.Description>
           <form
+            method="post"
             onSubmit={(e) => {
               e.preventDefault();
               onValider();

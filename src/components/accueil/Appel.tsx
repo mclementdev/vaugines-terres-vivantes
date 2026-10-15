@@ -8,7 +8,7 @@ import vignes from "../../../public/images/vignes.jpg";
 
 export function Appel({ appel, lettre }: { appel: BlocsAccueil["appel"]; lettre: BlocsAccueil["lettre"] }) {
   return (
-    <section aria-labelledby="titre-appel" className="sur-sombre relative isolate overflow-hidden text-white">
+    <section id="rejoindre" aria-labelledby="titre-appel" className="sur-sombre relative isolate overflow-hidden text-white">
       <Image src={vignes} alt="" fill sizes="100vw" placeholder="blur" className="-z-20 object-cover" />
       <div
         className="absolute inset-0 -z-10 bg-[rgba(143,61,30,.92)] md:bg-[linear-gradient(90deg,rgba(143,61,30,.96)_0%,rgba(143,61,30,.88)_55%,rgba(143,61,30,.55)_100%)]"

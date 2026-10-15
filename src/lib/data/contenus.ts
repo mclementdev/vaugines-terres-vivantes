@@ -104,7 +104,7 @@ type Stats = { adherents: number | null; actions: number; rendez_vous: number; c
 export async function getStatistiques(): Promise<Stats> {
   "use cache";
   cacheLife("contenu");
-  cacheTag(TAGS.actions, TAGS.evenements, TAGS.conseil);
+  cacheTag(TAGS.actions, TAGS.evenements, TAGS.conseil, TAGS.adherents);
 
   const { data, error } = await publicClient().rpc("public_stats");
   if (error) throw error;

@@ -41,6 +41,7 @@ export function FormulaireLettre({
           autoComplete="email"
           required
           placeholder="prenom@exemple.fr"
+          defaultValue={etat.email}
           aria-invalid={erreur || undefined}
           aria-describedby={`${id}-msg`}
           className="h-[52px] min-w-0 flex-[1_1_200px] rounded-[14px] border-0 bg-white px-4 text-[17px] text-encre placeholder:text-encre-3"

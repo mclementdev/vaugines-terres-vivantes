@@ -52,6 +52,7 @@ function Cadre({ children, etat, enCours, modifie, soumettre, libelle = "Enregis
 }) {
   return (
     <form
+      method="post"
       onSubmit={(ev) => {
         ev.preventDefault();
         soumettre();

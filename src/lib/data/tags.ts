@@ -12,4 +12,5 @@ export const TAGS = {
   glossaire: "glossaire",
   veille: "veille",
   commissions: "commissions",
+  adherents: "adherents",
 } as const;

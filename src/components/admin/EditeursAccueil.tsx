@@ -23,6 +23,7 @@ export function EditeurBloc({ cle, titre, champs, initial }: { cle: CleBloc; tit
 
   return (
     <form
+      method="post"
       id={`bloc-${cle}`}
       className="flex scroll-mt-6 flex-col gap-4 rounded-[20px] bg-white px-6 py-6"
       onSubmit={(e) => {

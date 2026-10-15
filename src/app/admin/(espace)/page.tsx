@@ -2,9 +2,12 @@ import Link from "next/link";
 
 import { creerArticle } from "@/app/admin/actions/articles";
 import { creerEvenement } from "@/app/admin/actions/evenements";
+import { PastilleCotisation } from "@/components/admin/adherents/ListeAdherents";
 import { BoutonAdmin, CarteAdmin, EnTeteAdmin, LienAdmin, Pastille, PastilleStatut } from "@/components/admin/ui";
 import { exigerAdmin } from "@/lib/auth";
 import { dansCombien, ilYA, jour } from "@/lib/dates";
+import { formatMontant } from "@/lib/adhesion/commun";
+import { indicateursAdherents } from "@/lib/admin/indicateurs";
 import { THEMES_IDEES } from "@/lib/libelles";
 import { clientSession } from "@/lib/supabase/serveur";
 
@@ -17,7 +20,7 @@ export default async function TableauDeBord(props: PageProps<"/admin">) {
   const supabase = await clientSession();
   const maintenant = new Date().toISOString();
 
-  const [evenements, aModerer, brouillons, signalements, publies] = await Promise.all([
+  const [evenements, aModerer, brouillons, signalements, adh] = await Promise.all([
     supabase.from("events").select("id, titre, starts_at, capacity, registration_enabled").gte("starts_at", maintenant).neq("status", "trashed").order("starts_at").limit(4),
     supabase.from("ideas").select("id, titre, theme, display_name, created_at").eq("moderation", "pending").order("created_at").limit(5),
     supabase
@@ -27,7 +30,7 @@ export default async function TableauDeBord(props: PageProps<"/admin">) {
       .order("updated_at", { ascending: false })
       .limit(5),
     supabase.from("veille_reports").select("id", { count: "exact", head: true }).is("treated_at", null),
-    supabase.from("articles").select("id", { count: "exact", head: true }).eq("status", "published").lte("published_at", maintenant),
+    indicateursAdherents(supabase),
   ]);
 
   const nbModeration = aModerer.data?.length ?? 0;
@@ -62,9 +65,19 @@ export default async function TableauDeBord(props: PageProps<"/admin">) {
       )}
 
       <div className="mb-6 grid gap-3.5 [grid-template-columns:repeat(auto-fit,minmax(200px,1fr))]">
-        <Indicateur href="/admin/adherents" libelle="Adhérents" valeur="—" detail="Suivi des adhésions au lot 4" />
-        <Indicateur href="/admin/articles" libelle="Articles publiés" valeur={String(publies.count ?? 0)} detail={`${brouillons.data?.length ?? 0} brouillon(s) ou programmé(s)`} />
-        <Indicateur href="/admin/veille" libelle="Signalements de veille" valeur={String(signalements.count ?? 0)} detail="à lire" />
+        <Indicateur href="/admin/adherents" libelle="Adhérents" valeur={String(adh.total)} detail={adh.semaine ? `+${adh.semaine} cette semaine` : "année d'AG en cours"} />
+        <Indicateur
+          href="/admin/adherents?vue=payee"
+          libelle="Cotisations reçues (année AG)"
+          valeur={formatMontant(adh.montantRecu)}
+          detail={`${adh.cotisants} cotisant${adh.cotisants > 1 ? "s" : ""} · ${adh.sansCotisation} sans cotisation`}
+        />
+        <Indicateur
+          href="/admin/adherents?vue=attendue"
+          libelle="Virements attendus"
+          valeur={String(adh.attendus)}
+          detail={adh.attendusAnciens ? `dont ${adh.attendusAnciens} depuis plus de 15 jours` : "aucun en retard"}
+        />
         <Indicateur
           href="/admin/moderation"
           libelle="À modérer"
@@ -75,6 +88,28 @@ export default async function TableauDeBord(props: PageProps<"/admin">) {
       </div>
 
       <div className="grid gap-[18px] [grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr))]">
+        <CarteAdmin titre="Adhésions récentes" lien={{ href: "/admin/adherents", libelle: "Tout voir" }}>
+          <Liste vide="Aucune adhésion pour l'année en cours.">
+            {adh.recentes.map((a) => (
+              <li key={a.id} className="flex items-center justify-between gap-2.5 border-t border-[#F0E6D8] py-3">
+                <span>
+                  <Link href={`/admin/adherents?id=${a.id}`} className="font-bold text-encre">
+                    {a.prenom} {a.nom}
+                  </Link>
+                  <span className="block text-sm text-encre-3">
+                    {a.joined_at && ilYA(a.joined_at)}
+                    {a.source === "papier" && " · bulletin papier"}
+                  </span>
+                </span>
+                <span className="text-right">
+                  <PastilleCotisation statut={a.status} />
+                  {a.status !== "sans" && <span className="block text-sm font-bold">{formatMontant(a.amount_cents)}</span>}
+                </span>
+              </li>
+            ))}
+          </Liste>
+        </CarteAdmin>
+
         <CarteAdmin titre="Événements à venir" lien={{ href: "/admin/evenements", libelle: "Gérer" }}>
           <Liste vide="Aucun événement daté à venir.">
             {evenements.data?.map((e) => (
@@ -126,7 +161,8 @@ export default async function TableauDeBord(props: PageProps<"/admin">) {
             {[
               ["/admin/articles", "Articles"],
               ["/admin/evenements", "Agenda"],
-              ["/admin/veille", "Veille"],
+              ["/admin/veille", `Veille${signalements.count ? ` (${signalements.count} signalement${signalements.count > 1 ? "s" : ""})` : ""}`],
+              ["/admin/adherents/nouveau", "Bulletin papier"],
               ["/admin/accueil", "Textes de l'accueil"],
               ["/statuts", "Voir les statuts"],
             ].map(([href, libelle]) => (
@@ -138,8 +174,7 @@ export default async function TableauDeBord(props: PageProps<"/admin">) {
             ))}
           </ul>
           <p className="mt-4 text-sm text-encre-3">
-            <Pastille ton="ambre">À venir</Pastille> Adhésions et cotisations (lot 4), inscriptions et modération (lot 5),
-            newsletter IA (lot 6).
+            <Pastille ton="ambre">À venir</Pastille> Inscriptions aux événements et modération (lot 5), newsletter IA (lot 6).
           </p>
         </CarteAdmin>
       </div>

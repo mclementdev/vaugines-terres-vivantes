@@ -11,7 +11,9 @@ Liste tenue à jour à chaque lot. Les exemples fictifs des maquettes sont en ba
 | Direction de la publication | Mentions légales | Nom d'une ou d'un coordonnateur général |
 | Crédits photographiques | Mentions légales | Auteurs des photos du village |
 | Adresses Facebook / Instagram | Comptes & paramètres | Icônes masquées tant qu'elles sont vides |
-| Nombre d'adhérents affiché | Paramètres | Compteur masqué ; calculé automatiquement au lot 4 |
+| Nombre d'adhérents affiché | Comptes & paramètres › Chiffres | Calculé automatiquement (année d'AG en cours, hors exemples) ; **masqué par défaut**, à rendre visible quand le conseil le souhaite |
+| Nom de domaine et compte Resend | Variables d'environnement | Indispensables pour envoyer les e-mails en production (`EMAIL_FROM` sur ce domaine) |
+| Règlement intérieur | Étape 3 de l'adhésion | La case cite « les statuts et le règlement intérieur » (brief) ; seul le lien vers les statuts existe : à publier ou à retirer du libellé |
 | Photos haute définition | Médias | `aerien` (886 px), `facade` (932 px), `fontaine` (997 px), `olivier` (847 px) sont justes pour un affichage large ; `aerien` sert de fond à la page événement |
 | Portraits du conseil collégial | Conseil | Initiales affichées en attendant (téléversement des portraits à prévoir) |
 | Photo de l'en-tête de l'accueil | Fichier `public/images/village.jpg` | Non modifiable depuis l'admin (choix technique : image optimisée au build) ; les 3 photos des piliers le sont |
@@ -25,6 +27,7 @@ Liste tenue à jour à chaque lot. Les exemples fictifs des maquettes sont en ba
 | Programme et accessibilité de la balade | `[parcours à préciser]`, `[Préciser une option courte.]` |
 | Article « Appel à vos archives et photos » | Date de publication fictive (12 oct.) |
 | Idées de la boîte à idées | 5 idées publiées + 1 en attente, avec soutiens et commentaires fictifs |
+| Adhérents | 7 personnes de la maquette (Camille Roux, Sophie Laurent…) avec cotisations et 3 abonnés à la lettre, sur l'année d'AG 2026–2027 (début fixé au 19/04/2026, date de création) |
 | Veille | Dossier « réchauffement climatique » (texte du dossier entre crochets) et 6 fiches : **dates et sources fictives** (`[Arrêté préfectoral]`…), sans lien |
 
 ## Glossaire à valider (`to_validate = true`)
@@ -47,6 +50,9 @@ Signature : le PDF indique « I-Charlotte Clément » ; le site affiche « Charl
 - « Faut-il être adhérent pour venir aux événements ? »
 
 ## À confirmer par l'association
+
+- Date de début de l'année d'AG 2026–2027 (19/04/2026 par défaut) : modifiable en base, les années suivantes s'ouvrent depuis « Adhérents ».
+- La case « lettre d'information » de l'adhésion est **décochée par défaut** (la maquette la montre cochée) : le RGPD exige un consentement actif.
 
 - Vocabulaire : « conseil collégial » (maquettes, lettre n°1) ou « conseil d'orientation » (courrier de bienvenue, statuts) pour la signature des e-mails.
 - Calendrier du débat climat : « printemps-été 2026 » dans la présentation du 7 mars, « en préparation / 2027 » dans les maquettes (repris).

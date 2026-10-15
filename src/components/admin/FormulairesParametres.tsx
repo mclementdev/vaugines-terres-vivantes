@@ -26,6 +26,7 @@ export function FormulaireReglages({ initial }: { initial: DonneesReglages }) {
 
   return (
     <form
+      method="post"
       noValidate
       onSubmit={(ev) => {
         ev.preventDefault();
