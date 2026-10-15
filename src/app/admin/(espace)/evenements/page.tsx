@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { creerEvenement } from "@/app/admin/actions/evenements";
 import { BoutonAdmin, EnTeteAdmin, PastilleStatut, TableauAdmin, TableauVide, VuesAdmin } from "@/components/admin/ui";
+import { placesParEvenement } from "@/lib/admin/inscriptions";
 import { exigerAdmin } from "@/lib/auth";
 import { horodatage, jour, plageHoraire } from "@/lib/dates";
 import { clientSession } from "@/lib/supabase/serveur";
@@ -18,6 +19,7 @@ export default async function ListeEvenements(props: PageProps<"/admin/evenement
     .select("id, titre, starts_at, ends_at, all_day, date_label, lieu, status, published_at, registration_enabled, capacity, is_sample")
     .order("starts_at", { ascending: true, nullsFirst: false });
   const tous = data ?? [];
+  const prises = await placesParEvenement(supabase);
   const maintenant = horodatage();
   const filtres = {
     "a-venir": (e: (typeof tous)[number]) => e.status !== "trashed" && (!e.starts_at || new Date(e.starts_at).getTime() >= maintenant),
@@ -82,7 +84,7 @@ export default async function ListeEvenements(props: PageProps<"/admin/evenement
                 )}
               </span>,
               <span key="i" className="text-sm text-encre-2">
-                {e.registration_enabled ? (e.capacity ? `${e.capacity} places` : "Ouvertes") : "—"}
+                {e.registration_enabled ? `${prises.get(e.id) ?? 0}${e.capacity ? ` / ${e.capacity}` : ""} inscrits` : "—"}
               </span>,
               <PastilleStatut key="s" status={e.status} publishedAt={e.published_at} />,
             ],

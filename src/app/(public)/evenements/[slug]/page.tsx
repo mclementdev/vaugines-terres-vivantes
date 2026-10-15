@@ -7,20 +7,24 @@ import { Suspense } from "react";
 
 import { ActionsEvenement } from "@/components/evenements/ActionsEvenement";
 import { CarteOSM } from "@/components/evenements/CarteOSM";
+import { FormulaireInscription } from "@/components/evenements/FormulaireInscription";
 import { LigneEvenement } from "@/components/evenements/LigneEvenement";
 import { Etiquette } from "@/components/ui/Etiquette";
 import { getAgenda, getEvenement, getSlugsEvenements, type EtapeProgramme } from "@/lib/data/pages";
 import { getReglages } from "@/lib/data/site";
 import { TAGS } from "@/lib/data/tags";
-import { dansCombien, jour, plageHoraire } from "@/lib/dates";
+import { aBientot, dansCombien, jour, plageHoraire } from "@/lib/dates";
 import { urlImage } from "@/lib/images";
+import { publicClient } from "@/lib/supabase/public";
 
 import aerien from "../../../../../public/images/aerien.jpg";
 
 const urlSite = () => process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 
 export async function generateStaticParams() {
-  return (await getSlugsEvenements()).map((slug) => ({ slug }));
+  // Au moins un paramètre est exigé au build (Cache Components) : repli en 404 si la liste est vide.
+  const slugs = await getSlugsEvenements();
+  return (slugs.length ? slugs : ["aucun"]).map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({ params }: PageProps<"/evenements/[slug]">): Promise<Metadata> {
@@ -63,6 +67,9 @@ async function ContenuEvenement({ slug }: { slug: string }) {
   if (!e) notFound();
 
   const url = `${urlSite()}/evenements/${e.slug}`;
+  const prises = e.registration_enabled ? ((await publicClient().rpc("places_prises", { p_event_id: e.id })).data ?? 0) : 0;
+  const restantes = e.capacity ? Math.max(e.capacity - prises, 0) : null;
+  const auRevoir = e.starts_at ? aBientot(e.starts_at) : "à bientôt";
   const passe = e.starts_at ? new Date(e.ends_at ?? e.starts_at) < new Date() : false;
   const relatif = e.starts_at && !passe ? dansCombien(e.starts_at) : null;
   const programme = (e.programme as EtapeProgramme[] | null) ?? [];
@@ -153,7 +160,20 @@ async function ContenuEvenement({ slug }: { slug: string }) {
               )}
             </Info>
             <Info terme="Prix">{e.prix}</Info>
-            {e.capacity && <Info terme="Places">{e.capacity} places</Info>}
+            {e.capacity && (
+              <Info terme="Places">
+                {e.registration_enabled ? (
+                  <>
+                    {prises} / {e.capacity} inscrits
+                    <span className="mt-2 block h-1.5 overflow-hidden rounded-full bg-pierre" aria-hidden="true">
+                      <span className="block h-full rounded-full bg-terre" style={{ width: `${Math.min(100, Math.round((prises / e.capacity) * 100))}%` }} />
+                    </span>
+                  </>
+                ) : (
+                  `${e.capacity} places`
+                )}
+              </Info>
+            )}
           </dl>
 
           {e.is_sample && (
@@ -212,12 +232,21 @@ async function ContenuEvenement({ slug }: { slug: string }) {
               <h2 id="titre-inscription" className="mb-1.5 font-titre text-2xl font-semibold">
                 Je m&apos;inscris
               </h2>
-              <p className="mb-4 text-[15px] text-encre-3">{e.prix}. L&apos;inscription nous aide à prévoir.</p>
-              {/* Lot 5 : formulaire d'inscription, jauge, confirmation et rappel par e-mail. */}
-              <p className="rounded-2xl bg-sable p-4 text-[15px] text-encre-2">
-                L&apos;inscription en ligne ouvre très bientôt. En attendant, écrivez-nous à{" "}
-                <a href={`mailto:${reglages.email}?subject=${encodeURIComponent(`Inscription : ${e.titre}`)}`}>{reglages.email}</a>.
+              <p className="mb-4 text-[15px] text-encre-3">
+                {e.prix}. L&apos;inscription nous aide à prévoir.
+                {restantes !== null && restantes > 0 && restantes <= 10 && (
+                  <strong className="block text-terre-fonce">
+                    Plus que {restantes} place{restantes > 1 ? "s" : ""} !
+                  </strong>
+                )}
               </p>
+              <FormulaireInscription eventId={e.id} slug={e.slug} restantes={restantes} aBientot={auRevoir} />
+              {restantes === 0 && (
+                <p className="mt-3 text-[15px] text-encre-3">
+                  Pour être prévenu·e si une place se libère, écrivez-nous :{" "}
+                  <a href={`mailto:${reglages.email}?subject=${encodeURIComponent(`Liste d'attente : ${e.titre}`)}`}>{reglages.email}</a>
+                </p>
+              )}
             </>
           ) : (
             <>

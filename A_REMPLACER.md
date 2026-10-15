@@ -26,7 +26,8 @@ Liste tenue à jour à chaque lot. Les exemples fictifs des maquettes sont en ba
 | Événements | Balade-découverte (24 oct., 10 h, place de la fontaine, 30 places), « Habiter demain » (21 nov., salle des fêtes, 60 places), collecte de photos (12 déc., bibliothèque), débat climat (2027) : **dates, horaires, lieux, jauges et coordonnées GPS fictifs** |
 | Programme et accessibilité de la balade | `[parcours à préciser]`, `[Préciser une option courte.]` |
 | Article « Appel à vos archives et photos » | Date de publication fictive (12 oct.) |
-| Idées de la boîte à idées | 5 idées publiées + 1 en attente, avec soutiens et commentaires fictifs |
+| Idées de la boîte à idées | 5 idées publiées + 1 en attente, avec soutiens et commentaires fictifs (3 commentaires en base, dont 1 en attente) |
+| Inscriptions | 7 inscriptions fictives à la balade (18 places sur 30, comme la maquette), adresses `@exemple.fr` |
 | Adhérents | 7 personnes de la maquette (Camille Roux, Sophie Laurent…) avec cotisations et 3 abonnés à la lettre, sur l'année d'AG 2026–2027 (début fixé au 19/04/2026, date de création) |
 | Veille | Dossier « réchauffement climatique » (texte du dossier entre crochets) et 6 fiches : **dates et sources fictives** (`[Arrêté préfectoral]`…), sans lien |
 
@@ -50,6 +51,10 @@ Signature : le PDF indique « I-Charlotte Clément » ; le site affiche « Charl
 - « Faut-il être adhérent pour venir aux événements ? »
 
 ## À confirmer par l'association
+
+- **Charte de la boîte à idées** (`/idees/charte`) : texte rédigé d'après la maquette et l'article 2 des statuts, à relire par le conseil.
+- Liste d'attente des événements complets : pas de file automatique, un lien invite à écrire à l'association.
+- Délai d'effacement des inscriptions : un mois après l'événement (page « Données personnelles » mise à jour en conséquence).
 
 - Date de début de l'année d'AG 2026–2027 (19/04/2026 par défaut) : modifiable en base, les années suivantes s'ouvrent depuis « Adhérents ».
 - La case « lettre d'information » de l'adhésion est **décochée par défaut** (la maquette la montre cochée) : le RGPD exige un consentement actif.

@@ -7,7 +7,9 @@ import { getArticle, getArticles, getSlugsArticles } from "@/lib/data/pages";
 import { urlImage } from "@/lib/images";
 
 export async function generateStaticParams() {
-  return (await getSlugsArticles()).map((slug) => ({ slug }));
+  // Au moins un paramètre est exigé au build (Cache Components) : repli en 404 si la liste est vide.
+  const slugs = await getSlugsArticles();
+  return (slugs.length ? slugs : ["aucun"]).map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({ params }: PageProps<"/actualites/[slug]">): Promise<Metadata> {

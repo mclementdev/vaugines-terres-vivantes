@@ -6,11 +6,11 @@ import { z } from "zod";
 
 import { serviceClient } from "@/lib/supabase/service";
 
-/** Carte centrée des pages de confirmation et de désinscription de la lettre. */
-export function CarteLettre({ titre, children }: { titre: string; children: ReactNode }) {
+/** Carte centrée des pages à jeton (lettre, inscription, suivi d'idée). */
+export function CarteLettre({ titre, surtitre = "Lettre d'information", children }: { titre: string; surtitre?: string; children: ReactNode }) {
   return (
     <div className="rounded-[28px] bg-white px-6 py-8 md:px-10 md:py-10">
-      <p className="mb-2 text-sm font-bold uppercase tracking-[.14em] text-terre-fonce">Lettre d&apos;information</p>
+      <p className="mb-2 text-sm font-bold uppercase tracking-[.14em] text-terre-fonce">{surtitre}</p>
       <h1 className="mb-4 font-titre text-[clamp(30px,4vw,44px)] font-semibold leading-[1.08] tracking-[-0.02em] [text-wrap:balance]">{titre}</h1>
       <div className="flex flex-col gap-4 text-encre-2">{children}</div>
     </div>

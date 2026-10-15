@@ -177,6 +177,26 @@ isOneToOne: false
                   Relationships: [
                     
                   ]
+                },"event_registrations": {
+                  Row: {
+                    "cancelled_at": string | null,"created_at": string,"email": string,"event_id": string,"id": string,"nom": string,"places": number,"reminder_sent_at": string | null,"status": Database["public"]['Enums']["registration_status"],"token": string,"updated_at": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "cancelled_at"?: string | null,"created_at"?: string,"email": string,"event_id": string,"id"?: string,"nom": string,"places"?: number,"reminder_sent_at"?: string | null,"status"?: Database["public"]['Enums']["registration_status"],"token"?: string,"updated_at"?: string
+                  }
+                  Update: {
+                    "cancelled_at"?: string | null,"created_at"?: string,"email"?: string,"event_id"?: string,"id"?: string,"nom"?: string,"places"?: number,"reminder_sent_at"?: string | null,"status"?: Database["public"]['Enums']["registration_status"],"token"?: string,"updated_at"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "event_registrations_event_id_fkey"
+      columns: ["event_id"]
+isOneToOne: false
+      referencedRelation: "events"
+      referencedColumns: ["id"]
+    }
+                  ]
                 },"events": {
                   Row: {
                     "accessibilite": string | null,"adresse": string | null,"all_day": boolean,"body_html": string,"body_json": Json | null,"capacity": number | null,"cover_alt": string | null,"cover_path": string | null,"created_at": string,"date_label": string | null,"ends_at": string | null,"featured": boolean,"id": string,"infos_pratiques": string | null,"is_sample": boolean,"latitude": number | null,"lieu": string,"longitude": number | null,"ouvert_a_tous": boolean,"prix": string,"programme": NonNullable<Json>,"published_at": string | null,"registration_enabled": boolean,"resume": string,"slug": string,"starts_at": string | null,"status": Database["public"]['Enums']["content_status"],"titre": string,"updated_at": string
@@ -233,16 +253,132 @@ isOneToOne: false
                   Relationships: [
                     
                   ]
-                },"ideas": {
+                },"idea_comments": {
                   Row: {
-                    "author_email": string | null,"comment_count": number,"created_at": string,"description": string,"display_name": string | null,"id": string,"is_sample": boolean,"moderation": Database["public"]['Enums']["idea_moderation"],"photo_path": string | null,"progress": Database["public"]['Enums']["idea_progress"],"published_at": string | null,"slug": string,"support_count": number,"theme": Database["public"]['Enums']["idea_theme"],"titre": string,"updated_at": string
+                    "body": string,"created_at": string,"display_name": string | null,"id": string,"idea_id": string,"is_sample": boolean,"moderated_at": string | null,"moderation": Database["public"]['Enums']["comment_moderation"],"moderation_note": string | null,"published_at": string | null,"report_count": number
                   }
                   ComputedFields: never
                   Insert: {
-                    "author_email"?: string | null,"comment_count"?: number,"created_at"?: string,"description": string,"display_name"?: string | null,"id"?: string,"is_sample"?: boolean,"moderation"?: Database["public"]['Enums']["idea_moderation"],"photo_path"?: string | null,"progress"?: Database["public"]['Enums']["idea_progress"],"published_at"?: string | null,"slug": string,"support_count"?: number,"theme": Database["public"]['Enums']["idea_theme"],"titre": string,"updated_at"?: string
+                    "body": string,"created_at"?: string,"display_name"?: string | null,"id"?: string,"idea_id": string,"is_sample"?: boolean,"moderated_at"?: string | null,"moderation"?: Database["public"]['Enums']["comment_moderation"],"moderation_note"?: string | null,"published_at"?: string | null,"report_count"?: number
                   }
                   Update: {
-                    "author_email"?: string | null,"comment_count"?: number,"created_at"?: string,"description"?: string,"display_name"?: string | null,"id"?: string,"is_sample"?: boolean,"moderation"?: Database["public"]['Enums']["idea_moderation"],"photo_path"?: string | null,"progress"?: Database["public"]['Enums']["idea_progress"],"published_at"?: string | null,"slug"?: string,"support_count"?: number,"theme"?: Database["public"]['Enums']["idea_theme"],"titre"?: string,"updated_at"?: string
+                    "body"?: string,"created_at"?: string,"display_name"?: string | null,"id"?: string,"idea_id"?: string,"is_sample"?: boolean,"moderated_at"?: string | null,"moderation"?: Database["public"]['Enums']["comment_moderation"],"moderation_note"?: string | null,"published_at"?: string | null,"report_count"?: number
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "idea_comments_idea_id_fkey"
+      columns: ["idea_id"]
+isOneToOne: false
+      referencedRelation: "ideas"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "idea_comments_idea_id_fkey"
+      columns: ["idea_id"]
+isOneToOne: false
+      referencedRelation: "ideas_public"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"idea_followers": {
+                  Row: {
+                    "created_at": string,"email": string,"id": string,"idea_id": string,"token": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "created_at"?: string,"email": string,"id"?: string,"idea_id": string,"token"?: string
+                  }
+                  Update: {
+                    "created_at"?: string,"email"?: string,"id"?: string,"idea_id"?: string,"token"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "idea_followers_idea_id_fkey"
+      columns: ["idea_id"]
+isOneToOne: false
+      referencedRelation: "ideas"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "idea_followers_idea_id_fkey"
+      columns: ["idea_id"]
+isOneToOne: false
+      referencedRelation: "ideas_public"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"idea_reports": {
+                  Row: {
+                    "comment_id": string | null,"created_at": string,"id": number,"idea_id": string | null,"motif": string | null,"reporter_key": string,"treated_at": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "comment_id"?: string | null,"created_at"?: string,"id"?: never,"idea_id"?: string | null,"motif"?: string | null,"reporter_key": string,"treated_at"?: string | null
+                  }
+                  Update: {
+                    "comment_id"?: string | null,"created_at"?: string,"id"?: never,"idea_id"?: string | null,"motif"?: string | null,"reporter_key"?: string,"treated_at"?: string | null
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "idea_reports_comment_id_fkey"
+      columns: ["comment_id"]
+isOneToOne: false
+      referencedRelation: "idea_comments"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "idea_reports_comment_id_fkey"
+      columns: ["comment_id"]
+isOneToOne: false
+      referencedRelation: "idea_comments_public"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "idea_reports_idea_id_fkey"
+      columns: ["idea_id"]
+isOneToOne: false
+      referencedRelation: "ideas"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "idea_reports_idea_id_fkey"
+      columns: ["idea_id"]
+isOneToOne: false
+      referencedRelation: "ideas_public"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"idea_supports": {
+                  Row: {
+                    "created_at": string,"idea_id": string,"voter_key": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "created_at"?: string,"idea_id": string,"voter_key": string
+                  }
+                  Update: {
+                    "created_at"?: string,"idea_id"?: string,"voter_key"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "idea_supports_idea_id_fkey"
+      columns: ["idea_id"]
+isOneToOne: false
+      referencedRelation: "ideas"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "idea_supports_idea_id_fkey"
+      columns: ["idea_id"]
+isOneToOne: false
+      referencedRelation: "ideas_public"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"ideas": {
+                  Row: {
+                    "author_email": string | null,"comment_count": number,"created_at": string,"description": string,"display_name": string | null,"edit_token": string | null,"id": string,"is_sample": boolean,"moderated_at": string | null,"moderation": Database["public"]['Enums']["idea_moderation"],"moderation_note": string | null,"photo_path": string | null,"progress": Database["public"]['Enums']["idea_progress"],"published_at": string | null,"report_count": number,"slug": string,"support_count": number,"theme": Database["public"]['Enums']["idea_theme"],"titre": string,"updated_at": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "author_email"?: string | null,"comment_count"?: number,"created_at"?: string,"description": string,"display_name"?: string | null,"edit_token"?: string | null,"id"?: string,"is_sample"?: boolean,"moderated_at"?: string | null,"moderation"?: Database["public"]['Enums']["idea_moderation"],"moderation_note"?: string | null,"photo_path"?: string | null,"progress"?: Database["public"]['Enums']["idea_progress"],"published_at"?: string | null,"report_count"?: number,"slug": string,"support_count"?: number,"theme": Database["public"]['Enums']["idea_theme"],"titre": string,"updated_at"?: string
+                  }
+                  Update: {
+                    "author_email"?: string | null,"comment_count"?: number,"created_at"?: string,"description"?: string,"display_name"?: string | null,"edit_token"?: string | null,"id"?: string,"is_sample"?: boolean,"moderated_at"?: string | null,"moderation"?: Database["public"]['Enums']["idea_moderation"],"moderation_note"?: string | null,"photo_path"?: string | null,"progress"?: Database["public"]['Enums']["idea_progress"],"published_at"?: string | null,"report_count"?: number,"slug"?: string,"support_count"?: number,"theme"?: Database["public"]['Enums']["idea_theme"],"titre"?: string,"updated_at"?: string
                   }
                   Relationships: [
                     
@@ -318,6 +454,50 @@ isOneToOne: true
                   }
                   Relationships: [
                     
+                  ]
+                },"moderation_log": {
+                  Row: {
+                    "action": string,"actor_id": string | null,"comment_id": string | null,"created_at": string,"id": number,"idea_id": string | null,"libelle": string,"motif": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "action": string,"actor_id"?: string | null,"comment_id"?: string | null,"created_at"?: string,"id"?: never,"idea_id"?: string | null,"libelle": string,"motif"?: string | null
+                  }
+                  Update: {
+                    "action"?: string,"actor_id"?: string | null,"comment_id"?: string | null,"created_at"?: string,"id"?: never,"idea_id"?: string | null,"libelle"?: string,"motif"?: string | null
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "moderation_log_actor_id_fkey"
+      columns: ["actor_id"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "moderation_log_comment_id_fkey"
+      columns: ["comment_id"]
+isOneToOne: false
+      referencedRelation: "idea_comments"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "moderation_log_comment_id_fkey"
+      columns: ["comment_id"]
+isOneToOne: false
+      referencedRelation: "idea_comments_public"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "moderation_log_idea_id_fkey"
+      columns: ["idea_id"]
+isOneToOne: false
+      referencedRelation: "ideas"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "moderation_log_idea_id_fkey"
+      columns: ["idea_id"]
+isOneToOne: false
+      referencedRelation: "ideas_public"
+      referencedColumns: ["id"]
+    }
                   ]
                 },"newsletter_subscribers": {
                   Row: {
@@ -486,6 +666,26 @@ isOneToOne: false
       referencedColumns: ["id"]
     }
                   ]
+                },"idea_comments_public": {
+                  Row: {
+                    "body": string | null,"display_name": string | null,"id": string | null,"idea_id": string | null,"published_at": string | null
+                  }
+                  ComputedFields: never
+                  Relationships: [
+                    {
+      foreignKeyName: "idea_comments_idea_id_fkey"
+      columns: ["idea_id"]
+isOneToOne: false
+      referencedRelation: "ideas"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "idea_comments_idea_id_fkey"
+      columns: ["idea_id"]
+isOneToOne: false
+      referencedRelation: "ideas_public"
+      referencedColumns: ["id"]
+    }
+                  ]
                 },"ideas_public": {
                   Row: {
                     "comment_count": number | null,"description": string | null,"display_name": string | null,"id": string | null,"is_sample": boolean | null,"photo_path": string | null,"progress": Database["public"]['Enums']["idea_progress"] | null,"published_at": string | null,"slug": string | null,"support_count": number | null,"theme": Database["public"]['Enums']["idea_theme"] | null,"titre": string | null
@@ -509,6 +709,11 @@ isOneToOne: false
 "hit_rate_limit":
 { Args: { "p_key": string,"p_max": number,"p_window_seconds": number }; Returns: boolean
                            },
+"inscrire_evenement":
+{ Args: { "p_email": string,"p_event_id": string,"p_nom": string,"p_places": number }; Returns: {
+              "restantes": number,"statut": string,"token": string
+            }[]
+                           },
 "is_admin":
 { Args: Record<PropertyKey, never>; Returns: boolean
                            },
@@ -531,6 +736,12 @@ isOneToOne: false
 "member_private_write":
 { Args: { "p_birth_date": string,"p_member_id": string,"p_phone": string }; Returns: undefined
                            },
+"modifier_inscription":
+{ Args: { "p_places": number,"p_token": string }; Returns: string
+                           },
+"places_prises":
+{ Args: { "p_event_id": string }; Returns: number
+                           },
 "public_stats":
 { Args: Record<PropertyKey, never>; Returns: Json
                            },
@@ -539,7 +750,7 @@ isOneToOne: false
                            }
           }
           Enums: {
-            "admin_role": "superadmin"|"admin","content_status": "draft"|"published"|"trashed","contribution_mode": "avec"|"sans","contribution_status": "attendue"|"payee"|"sans","faq_category": "association"|"adherer"|"cotisation"|"evenements"|"participer"|"donnees","glossary_category": "democratie"|"environnement"|"agriculture"|"association","idea_moderation": "pending"|"changes_requested"|"published"|"rejected","idea_progress": "proposee"|"etudiee"|"en_projet"|"realisee","idea_theme": "cadre_de_vie"|"eau"|"biodiversite"|"mobilite"|"patrimoine"|"energie"|"vivre_ensemble","member_source": "en_ligne"|"papier","payment_method": "virement"|"especes"|"cheque"|"carte","subscriber_status": "pending"|"active"|"unsubscribed","ton": "terre"|"olive"|"indigo"|"abricot","veille_theme": "environnement"|"urbanisme"|"eau"|"energie"|"democratie_locale"
+            "admin_role": "superadmin"|"admin","comment_moderation": "pending"|"published"|"rejected","content_status": "draft"|"published"|"trashed","contribution_mode": "avec"|"sans","contribution_status": "attendue"|"payee"|"sans","faq_category": "association"|"adherer"|"cotisation"|"evenements"|"participer"|"donnees","glossary_category": "democratie"|"environnement"|"agriculture"|"association","idea_moderation": "pending"|"changes_requested"|"published"|"rejected","idea_progress": "proposee"|"etudiee"|"en_projet"|"realisee","idea_theme": "cadre_de_vie"|"eau"|"biodiversite"|"mobilite"|"patrimoine"|"energie"|"vivre_ensemble","member_source": "en_ligne"|"papier","payment_method": "virement"|"especes"|"cheque"|"carte","registration_status": "confirmee"|"annulee","subscriber_status": "pending"|"active"|"unsubscribed","ton": "terre"|"olive"|"indigo"|"abricot","veille_theme": "environnement"|"urbanisme"|"eau"|"energie"|"democratie_locale"
           }
           CompositeTypes: {
             [_ in never]: never
@@ -659,7 +870,7 @@ export const Constants = {
           }
         },"public": {
           Enums: {
-            "admin_role": ["superadmin", "admin"],"content_status": ["draft", "published", "trashed"],"contribution_mode": ["avec", "sans"],"contribution_status": ["attendue", "payee", "sans"],"faq_category": ["association", "adherer", "cotisation", "evenements", "participer", "donnees"],"glossary_category": ["democratie", "environnement", "agriculture", "association"],"idea_moderation": ["pending", "changes_requested", "published", "rejected"],"idea_progress": ["proposee", "etudiee", "en_projet", "realisee"],"idea_theme": ["cadre_de_vie", "eau", "biodiversite", "mobilite", "patrimoine", "energie", "vivre_ensemble"],"member_source": ["en_ligne", "papier"],"payment_method": ["virement", "especes", "cheque", "carte"],"subscriber_status": ["pending", "active", "unsubscribed"],"ton": ["terre", "olive", "indigo", "abricot"],"veille_theme": ["environnement", "urbanisme", "eau", "energie", "democratie_locale"]
+            "admin_role": ["superadmin", "admin"],"comment_moderation": ["pending", "published", "rejected"],"content_status": ["draft", "published", "trashed"],"contribution_mode": ["avec", "sans"],"contribution_status": ["attendue", "payee", "sans"],"faq_category": ["association", "adherer", "cotisation", "evenements", "participer", "donnees"],"glossary_category": ["democratie", "environnement", "agriculture", "association"],"idea_moderation": ["pending", "changes_requested", "published", "rejected"],"idea_progress": ["proposee", "etudiee", "en_projet", "realisee"],"idea_theme": ["cadre_de_vie", "eau", "biodiversite", "mobilite", "patrimoine", "energie", "vivre_ensemble"],"member_source": ["en_ligne", "papier"],"payment_method": ["virement", "especes", "cheque", "carte"],"registration_status": ["confirmee", "annulee"],"subscriber_status": ["pending", "active", "unsubscribed"],"ton": ["terre", "olive", "indigo", "abricot"],"veille_theme": ["environnement", "urbanisme", "eau", "energie", "democratie_locale"]
           }
         }
 } as const

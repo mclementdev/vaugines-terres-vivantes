@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 
 import { restaurerEvenement, supprimerEvenement } from "@/app/admin/actions/evenements";
 import { FormulaireEvenement } from "@/components/admin/FormulaireEvenement";
+import { InscritsEvenement } from "@/components/admin/InscritsEvenement";
 import { BoutonAdmin, EnTeteAdmin } from "@/components/admin/ui";
 import { isoVersParis } from "@/lib/admin/outils";
 import { modeActuel } from "@/lib/admin/publication";
@@ -42,36 +43,39 @@ export default async function EditionEvenement(props: PageProps<"/admin/evenemen
 
   const enLigne = e.status === "published" && e.published_at && new Date(e.published_at) <= new Date();
   return (
-    <FormulaireEvenement
-      id={e.id}
-      status={e.status}
-      publishedAt={e.published_at}
-      publicSlug={enLigne ? e.slug : null}
-      initial={{
-        titre: e.titre,
-        slug: e.slug.startsWith("brouillon-") ? "" : e.slug,
-        resume: e.resume,
-        corpsJson: e.body_json ?? e.body_html,
-        corpsHtml: e.body_html,
-        debut: isoVersParis(e.starts_at),
-        fin: isoVersParis(e.ends_at),
-        journee: e.all_day,
-        dateLibelle: e.date_label ?? "",
-        lieu: e.lieu,
-        adresse: e.adresse ?? "",
-        latitude: e.latitude?.toString() ?? "",
-        longitude: e.longitude?.toString() ?? "",
-        prix: e.prix,
-        capacite: e.capacity?.toString() ?? "",
-        programme: (e.programme as EtapeProgramme[] | null) ?? [],
-        accessibilite: e.accessibilite ?? "",
-        ouvertATous: e.ouvert_a_tous,
-        inscription: e.registration_enabled,
-        coverPath: e.cover_path,
-        coverAlt: e.cover_alt ?? "",
-        featured: e.featured,
-        publication: { mode: modeActuel(e.status, e.published_at), date: isoVersParis(e.status === "published" ? e.published_at : null) },
-      }}
-    />
+    <>
+      <FormulaireEvenement
+        id={e.id}
+        status={e.status}
+        publishedAt={e.published_at}
+        publicSlug={enLigne ? e.slug : null}
+        initial={{
+          titre: e.titre,
+          slug: e.slug.startsWith("brouillon-") ? "" : e.slug,
+          resume: e.resume,
+          corpsJson: e.body_json ?? e.body_html,
+          corpsHtml: e.body_html,
+          debut: isoVersParis(e.starts_at),
+          fin: isoVersParis(e.ends_at),
+          journee: e.all_day,
+          dateLibelle: e.date_label ?? "",
+          lieu: e.lieu,
+          adresse: e.adresse ?? "",
+          latitude: e.latitude?.toString() ?? "",
+          longitude: e.longitude?.toString() ?? "",
+          prix: e.prix,
+          capacite: e.capacity?.toString() ?? "",
+          programme: (e.programme as EtapeProgramme[] | null) ?? [],
+          accessibilite: e.accessibilite ?? "",
+          ouvertATous: e.ouvert_a_tous,
+          inscription: e.registration_enabled,
+          coverPath: e.cover_path,
+          coverAlt: e.cover_alt ?? "",
+          featured: e.featured,
+          publication: { mode: modeActuel(e.status, e.published_at), date: isoVersParis(e.status === "published" ? e.published_at : null) },
+        }}
+      />
+      {e.registration_enabled && <InscritsEvenement eventId={e.id} capacite={e.capacity} />}
+    </>
   );
 }

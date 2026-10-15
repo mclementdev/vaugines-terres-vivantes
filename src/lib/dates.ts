@@ -83,6 +83,17 @@ export function dansCombien(d: Date | string, maintenant = new Date()): string |
   return null;
 }
 
+const formatJourSemaine = new Intl.DateTimeFormat("fr-FR", { timeZone: FUSEAU, weekday: "long" });
+
+/** Formule d'au revoir : « à demain », « à samedi » (moins d'une semaine), sinon « à bientôt ». */
+export function aBientot(d: Date | string, maintenant = new Date()): string {
+  const n = joursEntre(maintenant, new Date(d));
+  if (n === 0) return "à tout à l'heure";
+  if (n === 1) return "à demain";
+  if (n > 1 && n < 7) return `à ${formatJourSemaine.format(new Date(d))}`;
+  return "à bientôt";
+}
+
 /** « il y a 3 jours », « hier », « il y a 1 mois » pour les publications. */
 export function ilYA(d: Date | string, maintenant = new Date()): string {
   const n = -joursEntre(maintenant, new Date(d));

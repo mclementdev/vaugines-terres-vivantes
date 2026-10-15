@@ -77,6 +77,25 @@ Studio (interface de la base) : http://127.0.0.1:54323
   local (`MAILPIT_URL`), sinon rien n'est envoyé. Les journaux ne contiennent que le nom du modèle,
   jamais l'adresse ni le contenu.
 
+## Événements et boîte à idées
+
+- **Inscriptions** : formulaire sur la page de l'événement (jauge vérifiée dans une fonction Postgres
+  verrouillée, `inscrire_evenement` : impossible de dépasser la capacité). E-mail de confirmation avec
+  lien personnel `/evenements/inscription/<jeton>` (modifier le nombre de personnes, annuler). Une
+  inscription en double renvoie simplement le lien par e-mail (personne ne peut savoir qui est inscrit).
+  Côté admin : liste des inscrits et export CSV sur la fiche de l'événement.
+- **Tâche quotidienne** `/api/taches/quotidiennes` (Vercel Cron, `vercel.json`, 7 h UTC) : rappel la
+  veille aux inscrits, effacement des inscriptions un mois après l'événement. Protégée par `CRON_SECRET`.
+  En local : `npm run taches:quotidiennes` (serveur de dev lancé).
+- **Idées** : dépôt `/idees/nouvelle` (photo réduite à 1 600 px dans le navigateur, type vérifié côté
+  serveur par signature binaire, bucket `idees`), relecture avant publication, soutien en un clic (cookie
+  technique aléatoire haché, 6 soutiens par idée et par connexion et par jour au plus), commentaires
+  relus, signalements, suivi par e-mail, charte `/idees/charte`.
+- **Modération** `/admin/moderation` : publier, demander une modification (l'auteur reçoit un lien
+  `/idees/modifier/<jeton>`), refuser avec motif ; commentaires ; signalements (garder ou retirer) ;
+  avancement des idées (prévient l'auteur et les suiveurs) ; historique des décisions. Une idée refusée
+  ou retirée perd l'e-mail de son auteur et ses suivis.
+
 ## Organisation
 
 ```
@@ -88,7 +107,8 @@ src/components/site/   en-tête, pied de page, éléments signature (cyprès, vi
 src/components/accueil/ sections de la page d'accueil
 src/components/ui/     boutons, étiquettes
 src/components/adhesion/ parcours d'adhésion, page de remerciement
-src/lib/email/         envoi (Resend / Mailpit) et modèles d'e-mails (React Email)
+src/lib/email/         envoi (Resend / Mailpit), modèles d'e-mails (React Email), envois métier
+src/components/idees/  boîte à idées (liste, dépôt, commentaires, suivi, signalement)
 src/lib/adhesion/      règles partagées du parcours (schémas Zod, montants, libellé du virement)
 src/lib/data/          lectures publiques mises en cache ('use cache' + cacheTag)
 src/lib/supabase/      clients Supabase (public mis en cache, session, service, navigateur) et types
@@ -96,7 +116,7 @@ src/lib/admin/         publication, nettoyage HTML, téléversement, outils de f
 scripts/               création du premier superadmin
 supabase/migrations/   schéma SQL versionné (RLS)
 supabase/seeds/        contenus initiaux, appliqués dans l'ordre (01 contenus, 02 statuts, 03 glossaire et veille,
-                       04 année d'AG et adhérents fictifs) ;
+                       04 année d'AG et adhérents fictifs, 05 inscriptions et commentaires fictifs) ;
                        exemples fictifs marqués is_sample
 ```
 

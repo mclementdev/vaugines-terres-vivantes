@@ -6,7 +6,7 @@ import type { ReactNode } from "react";
 
 import type { Reglages } from "@/lib/data/site";
 
-const C = {
+export const C = {
   sable: "#F6EEE2",
   creme: "#EAD9BF",
   terre: "#B4502A",
@@ -17,14 +17,14 @@ const C = {
   bordure: "#E4D3BB",
 };
 const POLICE = "'Nunito Sans', Helvetica, Arial, sans-serif";
-const TITRE = "Outfit, 'Nunito Sans', Helvetica, Arial, sans-serif";
+export const TITRE = "Outfit, 'Nunito Sans', Helvetica, Arial, sans-serif";
 
 export const urlSite = () => (process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000").replace(/\/$/, "");
 
-const p = { margin: "0 0 14px", fontSize: "16px", lineHeight: "1.6", color: C.encre };
+export const p = { margin: "0 0 14px", fontSize: "16px", lineHeight: "1.6", color: C.encre };
 
 /** Mise en page commune : dessin du village, contenu, pied avec coordonnées. */
-function Gabarit({ apercu, reglages, children, mention }: { apercu: string; reglages: Reglages; children: ReactNode; mention: string }) {
+export function Gabarit({ apercu, reglages, children, mention }: { apercu: string; reglages: Reglages; children: ReactNode; mention: string }) {
   const a = reglages.adresse;
   return (
     <Html lang="fr">
@@ -54,7 +54,7 @@ function Gabarit({ apercu, reglages, children, mention }: { apercu: string; regl
   );
 }
 
-function Bouton({ href, children }: { href: string; children: ReactNode }) {
+export function Bouton({ href, children }: { href: string; children: ReactNode }) {
   return (
     <Button href={href} style={{ display: "inline-block", padding: "12px 22px", borderRadius: "999px", backgroundColor: C.terre, color: "#FFFFFF", fontWeight: 700, fontSize: "16px", textDecoration: "none" }}>
       {children}
@@ -62,13 +62,13 @@ function Bouton({ href, children }: { href: string; children: ReactNode }) {
   );
 }
 
-function Encadre({ children }: { children: ReactNode }) {
+export function Encadre({ children }: { children: ReactNode }) {
   return <Section style={{ backgroundColor: C.sable, borderRadius: "14px", padding: "14px 16px", margin: "0 0 16px" }}>{children}</Section>;
 }
 
 const mono = { fontFamily: "ui-monospace, Menlo, Consolas, monospace", fontWeight: 700 };
-const etiquette = { margin: 0, fontSize: "13px", color: C.encre3 };
-const valeur = { margin: "0 0 8px", fontSize: "15px", color: C.encre };
+export const etiquette = { margin: 0, fontSize: "13px", color: C.encre3 };
+export const valeur = { margin: "0 0 8px", fontSize: "15px", color: C.encre };
 
 /** Coordonnées bancaires et libellé du virement. */
 function Virement({ reglages, montant, libelle }: { reglages: Reglages; montant: string; libelle: string }) {
@@ -95,7 +95,7 @@ function Virement({ reglages, montant, libelle }: { reglages: Reglages; montant:
   );
 }
 
-function Signature({ reglages }: { reglages: Reglages }) {
+export function Signature({ reglages }: { reglages: Reglages }) {
   return (
     <Text style={{ ...p, margin: "18px 0 0" }}>
       Bien amicalement,
@@ -105,7 +105,7 @@ function Signature({ reglages }: { reglages: Reglages }) {
   );
 }
 
-async function produire(el: React.ReactElement) {
+export async function produire(el: React.ReactElement) {
   const [html, texte] = await Promise.all([render(el), render(el, { plainText: true })]);
   return { html, texte };
 }

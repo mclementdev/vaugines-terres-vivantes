@@ -12,7 +12,8 @@
     "db:stop": "supabase stop",
     "db:reset": "supabase db reset",
     "db:types": "supabase gen types typescript --local > src/lib/supabase/types.ts",
-    "admin:superadmin": "node --env-file=.env.local scripts/creer-superadmin.mjs"
+    "admin:superadmin": "node --env-file=.env.local scripts/creer-superadmin.mjs",
+    "taches:quotidiennes": "node --env-file=.env.local -e \"fetch('http://localhost:3000/api/taches/quotidiennes',{headers:{authorization:'Bearer '+process.env.CRON_SECRET}}).then(r=>r.text()).then(console.log)\""
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.3.1",

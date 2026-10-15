@@ -8,6 +8,7 @@ import { exigerAdmin } from "@/lib/auth";
 import { dansCombien, ilYA, jour } from "@/lib/dates";
 import { formatMontant } from "@/lib/adhesion/commun";
 import { indicateursAdherents } from "@/lib/admin/indicateurs";
+import { placesParEvenement } from "@/lib/admin/inscriptions";
 import { THEMES_IDEES } from "@/lib/libelles";
 import { clientSession } from "@/lib/supabase/serveur";
 
@@ -33,7 +34,14 @@ export default async function TableauDeBord(props: PageProps<"/admin">) {
     indicateursAdherents(supabase),
   ]);
 
-  const nbModeration = aModerer.data?.length ?? 0;
+  const nbIdees = aModerer.data?.length ?? 0;
+  const [coms, signales] = await Promise.all([
+    supabase.from("idea_comments").select("id", { count: "exact", head: true }).eq("moderation", "pending"),
+    supabase.from("ideas").select("id", { count: "exact", head: true }).eq("moderation", "published").gt("report_count", 0),
+  ]);
+  const nbComs = coms.count ?? 0;
+  const nbModeration = nbIdees + nbComs + (signales.count ?? 0);
+  const prises = await placesParEvenement(supabase, (evenements.data ?? []).map((e) => e.id));
   const aujourdhui = new Intl.DateTimeFormat("fr-FR", { weekday: "long", day: "numeric", month: "long", timeZone: "Europe/Paris" }).format(new Date());
 
   return (
@@ -82,7 +90,7 @@ export default async function TableauDeBord(props: PageProps<"/admin">) {
           href="/admin/moderation"
           libelle="À modérer"
           valeur={String(nbModeration)}
-          detail={`${nbModeration} idée${nbModeration > 1 ? "s" : ""} →`}
+          detail={`${nbIdees} idée${nbIdees > 1 ? "s" : ""}, ${nbComs} commentaire${nbComs > 1 ? "s" : ""} →`}
           accent
         />
       </div>
@@ -123,7 +131,7 @@ export default async function TableauDeBord(props: PageProps<"/admin">) {
                   </span>
                 </span>
                 <span className="text-right text-sm text-encre-3">
-                  {e.registration_enabled ? `${e.capacity ? `${e.capacity} places` : "Places libres"}` : "Sans inscription"}
+                  {e.registration_enabled ? `${prises.get(e.id) ?? 0}${e.capacity ? ` / ${e.capacity}` : ""} inscrits` : "Sans inscription"}
                 </span>
               </li>
             ))}
