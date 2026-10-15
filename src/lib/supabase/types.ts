@@ -69,6 +69,26 @@ isOneToOne: false
       referencedColumns: ["id"]
     }
                   ]
+                },"audit_log": {
+                  Row: {
+                    "action": string,"actor_id": string | null,"cible": string | null,"created_at": string,"detail": NonNullable<Json>,"id": number
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "action": string,"actor_id"?: string | null,"cible"?: string | null,"created_at"?: string,"detail"?: NonNullable<Json>,"id"?: never
+                  }
+                  Update: {
+                    "action"?: string,"actor_id"?: string | null,"cible"?: string | null,"created_at"?: string,"detail"?: NonNullable<Json>,"id"?: never
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "audit_log_actor_id_fkey"
+      columns: ["actor_id"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    }
+                  ]
                 },"categories": {
                   Row: {
                     "id": string,"nom": string,"position": number,"slug": string,"ton": Database["public"]['Enums']["ton"]
@@ -197,14 +217,14 @@ isOneToOne: false
                   ]
                 },"profiles": {
                   Row: {
-                    "created_at": string,"id": string,"nom": string,"prenom": string,"role": Database["public"]['Enums']["admin_role"],"updated_at": string
+                    "created_at": string,"email": string | null,"id": string,"invited_at": string | null,"nom": string,"prenom": string,"role": Database["public"]['Enums']["admin_role"],"updated_at": string
                   }
                   ComputedFields: never
                   Insert: {
-                    "created_at"?: string,"id": string,"nom"?: string,"prenom"?: string,"role"?: Database["public"]['Enums']["admin_role"],"updated_at"?: string
+                    "created_at"?: string,"email"?: string | null,"id": string,"invited_at"?: string | null,"nom"?: string,"prenom"?: string,"role"?: Database["public"]['Enums']["admin_role"],"updated_at"?: string
                   }
                   Update: {
-                    "created_at"?: string,"id"?: string,"nom"?: string,"prenom"?: string,"role"?: Database["public"]['Enums']["admin_role"],"updated_at"?: string
+                    "created_at"?: string,"email"?: string | null,"id"?: string,"invited_at"?: string | null,"nom"?: string,"prenom"?: string,"role"?: Database["public"]['Enums']["admin_role"],"updated_at"?: string
                   }
                   Relationships: [
                     
@@ -325,7 +345,10 @@ isOneToOne: false
                 }
           }
           Functions: {
-            "hit_rate_limit":
+            "compter_exemples":
+{ Args: Record<PropertyKey, never>; Returns: number
+                           },
+"hit_rate_limit":
 { Args: { "p_key": string,"p_max": number,"p_window_seconds": number }; Returns: boolean
                            },
 "is_admin":
@@ -338,6 +361,9 @@ isOneToOne: false
 { Args: { "published_at": string,"s": Database["public"]['Enums']["content_status"] }; Returns: boolean
                            },
 "public_stats":
+{ Args: Record<PropertyKey, never>; Returns: Json
+                           },
+"purger_exemples":
 { Args: Record<PropertyKey, never>; Returns: Json
                            }
           }

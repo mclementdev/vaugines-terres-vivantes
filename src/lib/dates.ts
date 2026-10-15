@@ -100,3 +100,8 @@ export function plageHoraire(debut: string, fin: string | null, journee = false)
   if (!fin) return heure(debut);
   return `${heure(debut)} – ${heure(fin)}`;
 }
+
+/** Horodatage courant (ms), pour les comparaisons côté serveur. */
+export function horodatage() {
+  return Date.now();
+}

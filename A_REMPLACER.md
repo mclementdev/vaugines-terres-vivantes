@@ -1,7 +1,7 @@
 # Contenus à remplacer ou à valider avant la mise en ligne
 
 Liste tenue à jour à chaque lot. Les exemples fictifs des maquettes sont en base avec
-`is_sample = true` : une purge en un clic sera disponible dans « Comptes & paramètres » (lot 3).
+`is_sample = true` : le superadmin les supprime en un clic dans « Comptes & paramètres › Avant la mise en ligne ».
 
 ## À fournir
 
@@ -10,10 +10,11 @@ Liste tenue à jour à chaque lot. Les exemples fictifs des maquettes sont en ba
 | Numéro RNA de l'association | Mentions légales | Format `W84…` (récépissé de déclaration) |
 | Direction de la publication | Mentions légales | Nom d'une ou d'un coordonnateur général |
 | Crédits photographiques | Mentions légales | Auteurs des photos du village |
-| Adresses Facebook / Instagram | Paramètres (lot 3) | Icônes masquées tant qu'elles sont vides |
+| Adresses Facebook / Instagram | Comptes & paramètres | Icônes masquées tant qu'elles sont vides |
 | Nombre d'adhérents affiché | Paramètres | Compteur masqué ; calculé automatiquement au lot 4 |
 | Photos haute définition | Médias | `aerien` (886 px), `facade` (932 px), `fontaine` (997 px), `olivier` (847 px) sont justes pour un affichage large ; `aerien` sert de fond à la page événement |
-| Portraits du conseil collégial | Conseil (lot 3) | Initiales affichées en attendant |
+| Portraits du conseil collégial | Conseil | Initiales affichées en attendant (téléversement des portraits à prévoir) |
+| Photo de l'en-tête de l'accueil | Fichier `public/images/village.jpg` | Non modifiable depuis l'admin (choix technique : image optimisée au build) ; les 3 photos des piliers le sont |
 | Date de validation de la page « Données personnelles » | Page Données personnelles | Après relecture par le conseil |
 
 ## Exemples fictifs (maquettes) — `is_sample = true`

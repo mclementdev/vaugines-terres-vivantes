@@ -32,16 +32,43 @@ Studio (interface de la base) : http://127.0.0.1:54323
 | `npm run lint` | ESLint |
 | `npm run build` | Build de production (la base doit être joignable : les pages publiques sont pré-rendues) |
 
+## Administration
+
+- Accès : `/admin`. Connexion par **lien magique** (pas de mot de passe), sans création de compte publique.
+- **Premier superadmin** (une seule fois, sur chaque environnement) :
+
+  ```bash
+  npm run admin:superadmin -- prenom.nom@exemple.fr "Prénom" "Nom"
+  ```
+
+  La personne reçoit un e-mail d'invitation ; elle invite ensuite les autres admins depuis « Comptes & paramètres ».
+- En local, les e-mails arrivent dans Mailpit : http://127.0.0.1:54324 (rien ne part réellement).
+- **Rôles** : `superadmin` (tout, plus comptes, paramètres, purge des exemples, statuts) ; `admin` (contenus,
+  adhérents, newsletter, modération). Contrôlés à trois niveaux : proxy (session), `exigerAdmin()` /
+  `exigerSuperadmin()` dans chaque page et action, et RLS Postgres (y compris Storage). Un déclencheur
+  empêche un admin de changer un rôle, et il reste toujours au moins un superadmin.
+- **Modèles d'e-mails d'authentification** : `supabase/templates/` (appliqués en local par `config.toml`).
+  En production, les recopier dans Supabase › Authentication › Email Templates (« Magic Link » et « Invite ») :
+  ils pointent vers `/auth/confirm?token_hash=…`.
+- Convention : chaque page de `src/app/admin/(espace)/` exporte `instant = false` (back-office toujours
+  rendu à la requête) et commence par `await exigerAdmin()`.
+- Les textes riches sont nettoyés côté serveur (`sanitize-html`) avant enregistrement ; les images sont
+  téléversées directement dans le bucket `medias` (10 Mo max, JPG/PNG/WebP/AVIF) avec un texte alternatif obligatoire.
+
 ## Organisation
 
 ```
 src/app/(public)/      pages publiques (accueil, mentions, données personnelles…)
-src/app/actions/       Server Actions (écritures publiques validées par Zod)
+src/app/actions/       Server Actions publiques (validées par Zod)
+src/app/admin/         back-office : connexion, (espace) protégé, actions/ serveur de l'admin
+src/components/admin/  éditeur Tiptap, formulaires, menu, tableaux
 src/components/site/   en-tête, pied de page, éléments signature (cyprès, village au trait)
 src/components/accueil/ sections de la page d'accueil
 src/components/ui/     boutons, étiquettes
 src/lib/data/          lectures publiques mises en cache ('use cache' + cacheTag)
-src/lib/supabase/      clients Supabase et types générés
+src/lib/supabase/      clients Supabase (public mis en cache, session, service, navigateur) et types
+src/lib/admin/         publication, nettoyage HTML, téléversement, outils de formulaires
+scripts/               création du premier superadmin
 supabase/migrations/   schéma SQL versionné (RLS)
 supabase/seeds/        contenus initiaux, appliqués dans l'ordre (01 contenus, 02 statuts, 03 glossaire et veille) ;
                        exemples fictifs marqués is_sample

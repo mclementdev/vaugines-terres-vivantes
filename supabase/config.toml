@@ -244,8 +244,18 @@ otp_expiry = 3600
 # admin_email = "admin@email.com"
 # sender_name = "Admin"
 
+# Modèles d'e-mails d'authentification (à reporter dans le dashboard Supabase en production).
+# Ils utilisent {{ .TokenHash }} : le lien est vérifié côté serveur par /auth/confirm.
+[auth.email.template.magic_link]
+subject = "Votre lien de connexion — vaugines, terres vivantes"
+content_path = "./supabase/templates/magic_link.html"
+
+[auth.email.template.invite]
+subject = "Invitation à administrer le site de vaugines, terres vivantes"
+content_path = "./supabase/templates/invite.html"
+
 # Uncomment to customize email template
-# [auth.email.template.invite]
+# [auth.email.template.invite_exemple]
 # subject = "You have been invited"
 # content_path = "./supabase/templates/invite.html"
 

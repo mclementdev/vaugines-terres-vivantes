@@ -4,6 +4,7 @@ import Link from "next/link";
 import { VillageTrait } from "@/components/site/VillageTrait";
 import type { BlocsAccueil, getConseil } from "@/lib/data/site";
 import { cn } from "@/lib/cn";
+import { urlImage } from "@/lib/images";
 
 const TEINTES_PILIERS = [
   { carte: "bg-white", numero: "text-olive", texte: "text-encre-2" },
@@ -36,7 +37,7 @@ export function Association({ bloc }: { bloc: BlocsAccueil["association"] }) {
           return (
             <li key={p.titre} className={cn("carte flex overflow-hidden rounded-[22px] md:flex-col md:rounded-3xl", t.carte)}>
               <div className="relative w-[104px] shrink-0 md:h-[200px] md:w-full">
-                <Image src={p.image} alt={p.alt} fill sizes="(min-width: 768px) 400px, 104px" className="object-cover" />
+                <Image src={urlImage(p.image)} alt={p.alt} fill sizes="(min-width: 768px) 400px, 104px" className="object-cover" />
               </div>
               <div className="px-5 py-4 md:px-7 md:pb-[30px] md:pt-[26px]">
                 <span className={cn("font-titre text-[15px] font-semibold", t.numero)}>{p.numero}</span>
