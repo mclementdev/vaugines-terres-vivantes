@@ -21,7 +21,8 @@ export async function demanderLien(_: EtatConnexion, formData: FormData): Promis
     return { statut: "erreur", message: "Trop de demandes : réessayez dans un quart d'heure.", email };
   }
   const supabase = await clientSession();
-  await supabase.auth.signInWithOtp({ email, options: { shouldCreateUser: false } });
+  const site = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+  await supabase.auth.signInWithOtp({ email, options: { shouldCreateUser: false, emailRedirectTo: `${site}/auth/confirm?next=/admin` } });
   return { statut: "envoye", email };
 }
 

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 
 import { FormulaireConnexion } from "@/components/admin/FormulaireConnexion";
+import { SessionInvitation } from "@/components/admin/SessionInvitation";
 import { Cypres } from "@/components/site/Cypres";
 
 export const metadata: Metadata = { title: "Connexion" };
@@ -24,6 +25,7 @@ export default function Connexion(props: PageProps<"/admin/connexion">) {
           </p>
         </div>
         <h1 className="mb-5 font-titre text-[30px] font-semibold leading-tight">Connexion</h1>
+        <SessionInvitation />
         <Suspense fallback={<FormulaireConnexion />}>
           <AvecAlerte searchParams={props.searchParams} />
         </Suspense>

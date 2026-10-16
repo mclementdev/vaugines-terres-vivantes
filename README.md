@@ -149,7 +149,7 @@ bonnes pratiques et SEO 100.
 
 ### 3. Vercel
 
-- [ ] Importer le dépôt, dossier racine `site/`, framework Next.js. La région `cdg1` vient de `vercel.json`.
+- [ ] Importer le dépôt (le dossier `site/` en est la racine), framework Next.js. La région `cdg1` vient de `vercel.json`.
 - [ ] Variables d'environnement (Production) :
 
   | Variable | Valeur |
