@@ -88,7 +88,7 @@ export async function Footer() {
       <div className="conteneur pb-7">
         <VillageTrait
           decoratif
-          sizes="760px"
+          sizes="(min-width: 800px) 760px, 100vw"
           className="mx-auto mb-5 h-auto w-full max-w-[760px] opacity-25 invert"
         />
         <p className="text-center text-sm text-creme-3">© 2026 vaugines, terres vivantes</p>

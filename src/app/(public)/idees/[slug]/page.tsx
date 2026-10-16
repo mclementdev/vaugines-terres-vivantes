@@ -36,8 +36,9 @@ export async function generateMetadata({ params }: PageProps<"/idees/[slug]">): 
 }
 
 export default function PageIdee(props: PageProps<"/idees/[slug]">) {
+  // Repli plus haut que l'écran : le pied de page ne saute pas quand le contenu arrive.
   return (
-    <Suspense fallback={<div className="min-h-[60vh]" aria-busy="true" />}>
+    <Suspense fallback={<div className="min-h-[110svh]" aria-busy="true" />}>
       <Idee params={props.params} />
     </Suspense>
   );

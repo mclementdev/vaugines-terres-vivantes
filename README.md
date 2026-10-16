@@ -6,7 +6,9 @@ Site de l'association loi 1901 **vaugines, terres vivantes** (Vaugines, 84160, L
 - **Supabase** : Postgres (RLS sur toutes les tables), Auth, Storage
 - Déploiement **Vercel** (région Paris `cdg1`), base Supabase en région Paris
 
-> Ce README est complété à chaque lot. La checklist de mise en ligne complète arrive au lot 7.
+> La **newsletter IA** (lot 6) est reportée : la page « Newsletter IA » de l'administration l'annonce,
+> et les inscriptions à la lettre sont déjà recueillies (double confirmation). Guide d'utilisation :
+> [`GUIDE_SUPERADMIN.md`](./GUIDE_SUPERADMIN.md).
 
 ## Démarrer en local
 
@@ -31,6 +33,7 @@ Studio (interface de la base) : http://127.0.0.1:54323
 | `npm run typecheck` | Vérifie les types |
 | `npm run lint` | ESLint |
 | `npm run build` | Build de production (la base doit être joignable : les pages publiques sont pré-rendues) |
+| `npm run test:e2e` | Tests de bout en bout Playwright (voir « Tests ») |
 
 ## Administration
 
@@ -96,6 +99,95 @@ Studio (interface de la base) : http://127.0.0.1:54323
   avancement des idées (prévient l'auteur et les suiveurs) ; historique des décisions. Une idée refusée
   ou retirée perd l'e-mail de son auteur et ses suivis.
 
+## Tests
+
+Tests de bout en bout avec Playwright (`tests/e2e/`), sur la base **locale** uniquement (refus net sinon) :
+
+```bash
+npx playwright install chromium   # une seule fois
+npm run db:start                  # base locale
+npm run test:e2e                  # lance aussi npm run dev s'il ne tourne pas déjà
+```
+
+| Fichier | Ce qui est vérifié |
+|---|---|
+| `adhesion.spec.ts` | Parcours en 3 étapes, erreurs accessibles, enregistrement, e-mail de bienvenue avec les statuts en PDF |
+| `evenement.spec.ts` | Inscription, jauge, e-mail de confirmation, lien personnel : modification puis annulation |
+| `idees.spec.ts` | Soutien d'une idée, mémorisé au rechargement, puis retiré |
+| `droits.spec.ts` | Visiteur, compte sans rôle, admin et superadmin ; lecture directe de la base refusée (RLS) |
+| `accessibilite.spec.ts` | Audit axe (WCAG 2.1 AA) de toutes les pages du sitemap et de l'administration ; clavier (lien d'évitement, menu mobile) |
+
+Les tests créent leurs propres données (adresses `@exemple.test`, comptes `e2e-…`) et les suppriment.
+Les e-mails sont lus dans Mailpit. Le logotype est exclu du contrôle de contraste (exception WCAG 1.4.3).
+
+Mesures Lighthouse mobile (build de production local) : performance 92 à 96, accessibilité 96 à 97,
+bonnes pratiques et SEO 100.
+
+## Mise en ligne (checklist)
+
+À faire dans l'ordre, une seule fois. Compter une demi-journée, dont l'attente DNS.
+
+### 1. Supabase (région Europe, Paris `eu-west-3`)
+
+- [ ] Créer le projet (offre gratuite suffisante au départ), noter l'URL et les clés (publishable et secret).
+- [ ] Appliquer les migrations et les contenus initiaux : `npx supabase link --project-ref <ref>` puis
+      `npx supabase db push --include-seed`. Les seeds créent les statuts, le glossaire, la FAQ, l'année d'AG
+      2026–2027 et les exemples fictifs des maquettes (`is_sample`), retirés plus tard en un clic (étape 4).
+- [ ] Authentication › Sign In / Providers : désactiver « Allow new users to sign up » ; garder l'e-mail activé.
+- [ ] Authentication › URL Configuration : Site URL `https://<domaine>` ; Redirect URLs `https://<domaine>/**`.
+- [ ] Authentication › Email Templates : recopier `supabase/templates/magic_link.html` (« Magic Link ») et
+      `invite.html` (« Invite user »).
+- [ ] Authentication › SMTP Settings : brancher Resend (hôte `smtp.resend.com`, port 465, utilisateur `resend`,
+      mot de passe = clé API Resend), expéditeur sur le domaine. Sans cela, Supabase limite les e-mails de connexion.
+- [ ] Vérifier dans Storage que les buckets `medias` et `idees` existent (créés par les migrations).
+
+### 2. Resend et domaine
+
+- [ ] Acheter ou choisir le nom de domaine ; l'ajouter dans Resend (région UE) et créer les enregistrements
+      DNS donnés (SPF, DKIM, et un DMARC `v=DMARC1; p=none;` pour commencer). Attendre « Verified ».
+- [ ] Créer une clé API Resend (droit « Sending access » sur ce domaine uniquement).
+
+### 3. Vercel
+
+- [ ] Importer le dépôt, dossier racine `site/`, framework Next.js. La région `cdg1` vient de `vercel.json`.
+- [ ] Variables d'environnement (Production) :
+
+  | Variable | Valeur |
+  |---|---|
+  | `NEXT_PUBLIC_SITE_URL` | `https://<domaine>` (sans / final) |
+  | `NEXT_PUBLIC_SUPABASE_URL` | URL du projet Supabase |
+  | `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | clé publishable |
+  | `SUPABASE_SECRET_KEY` | clé secrète (serveur uniquement) |
+  | `RESEND_API_KEY` | clé Resend |
+  | `EMAIL_FROM` | `vaugines, terres vivantes <bonjour@<domaine>>` |
+  | `EMAIL_REPLY_TO` | `vauginesterresvivantes@gmail.com` |
+  | `CRON_SECRET` | chaîne aléatoire longue (`openssl rand -hex 32`) |
+  | `ANTI_ABUS_SEL` | autre chaîne aléatoire longue |
+
+  Ne **pas** définir `MAILPIT_URL` en production. L'IBAN et le titulaire se saisissent dans l'administration.
+- [ ] Déployer, puis Settings › Domains : ajouter le domaine et suivre les indications DNS.
+- [ ] Settings › Cron Jobs : vérifier que la tâche `/api/taches/quotidiennes` (7 h UTC) apparaît.
+
+### 4. Premier superadmin et contenus
+
+- [ ] En local, avec un `.env.production.local` contenant les valeurs de production (jamais commité) :
+      `node --env-file=.env.production.local scripts/creer-superadmin.mjs prenom.nom@… "Prénom" "Nom"`.
+- [ ] Se connecter sur `https://<domaine>/admin`, puis dans « Comptes & paramètres » : coordonnées, e-mail
+      d'alerte, **IBAN et titulaire**, réseaux, signature ; inviter les autres admins.
+- [ ] Remplacer les contenus provisoires listés dans [`A_REMPLACER.md`](./A_REMPLACER.md), puis
+      « Avant la mise en ligne › Tout supprimer » pour retirer les exemples fictifs.
+
+### 5. Vérifications en production
+
+- [ ] Adhésion test avec sa propre adresse : e-mail de bienvenue reçu (pas en indésirables), PDF joint,
+      alerte reçue ; puis effacer la fiche (superadmin).
+- [ ] Inscription test à un événement, e-mail reçu, annulation ; dépôt d'une idée, modération.
+- [ ] Inscription à la lettre : confirmation puis désinscription.
+- [ ] Connexion admin par lien magique depuis un autre appareil.
+- [ ] `https://<domaine>/robots.txt` et `/sitemap.xml` ; déclarer le sitemap dans Google Search Console.
+- [ ] Lighthouse mobile sur l'accueil (≥ 90) ; vérifier l'aperçu de partage (Open Graph) d'un article.
+- [ ] Les déploiements de prévisualisation Vercel ne sont pas indexés (robots `Disallow: /`) : rien à faire.
+
 ## Organisation
 
 ```
@@ -114,6 +206,7 @@ src/lib/data/          lectures publiques mises en cache ('use cache' + cacheTag
 src/lib/supabase/      clients Supabase (public mis en cache, session, service, navigateur) et types
 src/lib/admin/         publication, nettoyage HTML, téléversement, outils de formulaires
 scripts/               création du premier superadmin
+tests/e2e/             tests Playwright de bout en bout
 supabase/migrations/   schéma SQL versionné (RLS)
 supabase/seeds/        contenus initiaux, appliqués dans l'ordre (01 contenus, 02 statuts, 03 glossaire et veille,
                        04 année d'AG et adhérents fictifs, 05 inscriptions et commentaires fictifs) ;

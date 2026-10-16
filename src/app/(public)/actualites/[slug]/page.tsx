@@ -31,8 +31,9 @@ export async function generateMetadata({ params }: PageProps<"/actualites/[slug]
 }
 
 export default function PageArticle(props: PageProps<"/actualites/[slug]">) {
+  // Repli plus haut que l'écran : le pied de page ne saute pas quand le contenu arrive.
   return (
-    <Suspense fallback={<div className="conteneur min-h-[60vh] py-16" aria-busy="true" />}>
+    <Suspense fallback={<div className="min-h-[110svh]" aria-busy="true" />}>
       <Article params={props.params} />
     </Suspense>
   );

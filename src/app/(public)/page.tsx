@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { cacheLife, cacheTag } from "next/cache";
 
 import { Actions } from "@/components/accueil/Actions";
@@ -18,6 +19,8 @@ import {
 } from "@/lib/data/contenus";
 import { getBlocsAccueil, getConseil, getReglages } from "@/lib/data/site";
 import { TAGS } from "@/lib/data/tags";
+
+export const metadata: Metadata = { alternates: { canonical: "/" } };
 
 /**
  * Accueil, entièrement alimenté par la base. Mis en cache (dates relatives

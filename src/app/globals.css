@@ -98,6 +98,12 @@
   a:hover {
     color: var(--color-terre-sombre);
   }
+  /* Liens au fil du texte : soulignés, pour ne pas reposer sur la seule couleur (WCAG 1.4.1). */
+  p a:not(.no-underline):not(.terme) {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1px;
+  }
 
   /* Focus visible partout, contrasté sur fonds clairs et sombres. */
   :focus-visible {

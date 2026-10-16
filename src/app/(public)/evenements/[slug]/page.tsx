@@ -45,8 +45,9 @@ export async function generateMetadata({ params }: PageProps<"/evenements/[slug]
 }
 
 export default function PageEvenement(props: PageProps<"/evenements/[slug]">) {
+  // Repli plus haut que l'écran : le pied de page ne saute pas quand le contenu arrive.
   return (
-    <Suspense fallback={<div className="min-h-[70vh] bg-brun" aria-busy="true" />}>
+    <Suspense fallback={<div className="min-h-[110svh] bg-brun" aria-busy="true" />}>
       <Evenement params={props.params} />
     </Suspense>
   );

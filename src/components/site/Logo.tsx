@@ -25,7 +25,10 @@ export function Logo({ compact = false, className }: { compact?: boolean; classN
       >
         vaugines,
         <br />
-        <span className="font-semibold text-terre">terres vivantes</span>
+        {/* Logotype : exempté de l'exigence de contraste (WCAG 1.4.3), couleur de la charte. */}
+        <span data-logotype className="font-semibold text-terre">
+          terres vivantes
+        </span>
       </span>
       <span className="sr-only"> — accueil</span>
     </Link>

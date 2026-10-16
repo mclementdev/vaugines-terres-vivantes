@@ -85,10 +85,10 @@ function BarreOutils({ editor, evenements, simple }: { editor: Editor; evenement
       <div role="toolbar" aria-label="Mise en forme" className="flex flex-wrap gap-0.5 border-y border-[#F0E6D8] bg-[#FBF7F1] px-5 py-1.5">
         {!simple && (
           <>
-            <button type="button" className={btn} aria-label="Titre de section" aria-pressed={etat.h2} onClick={() => c().toggleHeading({ level: 2 }).run()}>
+            <button type="button" className={btn} aria-label="H2 : titre de section" aria-pressed={etat.h2} onClick={() => c().toggleHeading({ level: 2 }).run()}>
               H2
             </button>
-            <button type="button" className={btn} aria-label="Sous-titre" aria-pressed={etat.h3} onClick={() => c().toggleHeading({ level: 3 }).run()}>
+            <button type="button" className={btn} aria-label="H3 : sous-titre" aria-pressed={etat.h3} onClick={() => c().toggleHeading({ level: 3 }).run()}>
               H3
             </button>
           </>
@@ -108,7 +108,10 @@ function BarreOutils({ editor, evenements, simple }: { editor: Editor; evenement
           </svg>
         </button>
         <button type="button" className={btn} aria-label="Liste numérotée" aria-pressed={etat.numerotee} onClick={() => c().toggleOrderedList().run()}>
-          1.
+          <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+            <path d="M8 5h9M8 10h9M8 15h9" />
+            <path d="M2.5 3.5h1.5v3.5M2.5 7h3M2.5 12.5c0-1 2.5-1 2.5 0 0 1-2.5 1.5-2.5 3h2.6" strokeWidth="1.3" />
+          </svg>
         </button>
         <button type="button" className={btn} aria-label="Citation" aria-pressed={etat.citation} onClick={() => c().toggleBlockquote().run()}>
           «»

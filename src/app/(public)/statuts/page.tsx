@@ -51,10 +51,10 @@ export default async function Statuts() {
               <circle cx="10" cy="10" r="8" />
               <path d="M10 9v5M10 6v.5" />
             </svg>
-            <span>
+            <p>
               Un mot vous échappe ? Les termes soulignés en pointillé renvoient au <Link href="/glossaire">glossaire</Link>{" "}
               (ex. <Link href="/glossaire#consensus">consensus</Link>, <Link href="/glossaire#consentement">consentement</Link>).
-            </span>
+            </p>
           </aside>
 
           {articles.map((a) => (
