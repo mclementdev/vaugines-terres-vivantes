@@ -63,6 +63,7 @@ test("administration : aucune violation WCAG AA détectée par axe", async ({ pa
     "/admin/moderation?vue=statuts",
     "/admin/moderation?vue=historique",
     "/admin/comptes",
+    "/admin/mot-de-passe",
   ];
   const problemes = await auditer(page, urls);
   expect(problemes, problemes.join("\n")).toEqual([]);

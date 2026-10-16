@@ -129,33 +129,6 @@ export async function enregistrerReglages(donnees: DonneesReglages): Promise<Eta
 // ---------------------------------------------------------------------------
 // Comptes (superadmin)
 // ---------------------------------------------------------------------------
-const schemaInvitation = z.object({
-  email: z.email({ error: "Adresse e-mail invalide." }),
-  prenom: t(60),
-  nom: t(60, 0),
-  role: z.enum(["admin", "superadmin"]),
-});
-
-/** Invite un admin : e-mail d'invitation Supabase + profil. */
-export async function inviterAdmin(_: EtatForm, formData: FormData): Promise<EtatForm> {
-  const admin = await exigerSuperadmin();
-  const r = schemaInvitation.safeParse(Object.fromEntries(formData));
-  if (!r.success) return KO(r.error);
-  const d = r.data;
-  const service = serviceClient();
-  const site = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
-  const { data, error } = await service.auth.admin.inviteUserByEmail(d.email, { redirectTo: `${site}/admin` });
-  if (error) {
-    return { statut: "erreur", message: error.code === "email_exists" ? "Un compte existe déjà avec cette adresse." : "L'invitation n'a pas pu être envoyée." };
-  }
-  const { error: e2 } = await service
-    .from("profiles")
-    .upsert({ id: data.user.id, email: d.email, prenom: d.prenom, nom: d.nom, role: d.role, invited_at: new Date().toISOString() });
-  if (e2) return ECHEC;
-  await service.from("audit_log").insert({ actor_id: admin.id, action: "invitation", cible: d.email, detail: { role: d.role } });
-  return OK(`Invitation envoyée à ${d.email}.`);
-}
-
 export async function changerRole(id: string, role: "admin" | "superadmin") {
   const admin = await exigerSuperadmin();
   const supabase = await clientSession();

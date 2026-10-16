@@ -5,9 +5,11 @@ d'administration : **https://&lt;domaine&gt;/admin**.
 
 ## Se connecter
 
-1. Ouvrez `/admin`, saisissez votre adresse e-mail, cliquez sur « Recevoir mon lien de connexion ».
-2. Vous recevez un **lien de connexion** par e-mail (pas de mot de passe). Cliquez dessus : vous êtes connecté·e.
-3. Le lien n'est valable qu'une heure et une seule fois. En cas de souci, redemandez-en un.
+1. Ouvrez `/admin`, saisissez votre adresse e-mail et votre mot de passe, puis « Se connecter ».
+2. **Premier accès ou mot de passe oublié** : un superadmin vous transmet un lien personnel. Ouvrez-le : vous
+   arrivez sur « Mon mot de passe » pour en choisir un (12 caractères au moins ; une phrase de quelques mots
+   convient très bien). Le lien n'est valable qu'une heure et une seule fois.
+3. Pour changer de mot de passe : lien « Mot de passe » en bas du menu.
 
 Le menu de gauche (ou le bouton « Menu » sur téléphone) donne accès à tout. Les pastilles orange signalent ce qui attend une action.
 
@@ -80,15 +82,18 @@ en avant : ce choix sera repris à ce moment-là.
 
 ## Comptes et paramètres (superadmin)
 
-- **Inviter un admin** : e-mail, prénom, rôle. La personne reçoit une invitation. Un admin gère les contenus,
-  les adhérents et la modération ; seul le superadmin gère les comptes, les paramètres et l'effacement.
-  Il reste toujours au moins un superadmin.
+- **Ajouter une personne** : e-mail, prénom, rôle, puis « Créer le compte ». Un lien personnel s'affiche :
+  « Copier le lien » et transmettez-le-lui (message, SMS…). Il part aussi par e-mail si l'envoi est configuré.
+- **Mot de passe oublié** : « Envoyer un lien de connexion » sur la ligne de la personne, même principe.
+  Ce lien donne accès au compte : ne le transmettez qu'à la personne concernée.
+- Un admin gère les contenus, les adhérents et la modération ; seul le superadmin gère les comptes, les
+  paramètres et l'effacement. Il reste toujours au moins un superadmin.
 - **Paramètres du site** : adresse, e-mail de contact public, e-mail d'alerte, **IBAN et titulaire** (affichés
   aux nouveaux adhérents pour le virement), réseaux sociaux, chiffres de l'accueil (afficher ou masquer),
   signature des e-mails.
 - **Avant la mise en ligne › Tout supprimer** : retire en une fois les exemples fictifs des maquettes.
-- **Journal des actions sensibles** : les 15 dernières opérations sensibles (invitations, rôles,
-  paramètres, suppressions, effacements, exports).
+- **Journal des actions sensibles** : les 15 dernières opérations sensibles (créations de comptes,
+  liens de connexion, rôles, paramètres, suppressions, effacements, exports).
 
 ## En cas de souci
 

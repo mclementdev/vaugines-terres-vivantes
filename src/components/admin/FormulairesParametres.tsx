@@ -1,12 +1,12 @@
 "use client";
 
-import { useActionState, useState, useTransition } from "react";
+import { useState, useTransition } from "react";
 
-import { enregistrerReglages, inviterAdmin, purgerExemples, type DonneesReglages } from "@/app/admin/actions/parametres";
+import { enregistrerReglages, purgerExemples, type DonneesReglages } from "@/app/admin/actions/parametres";
 import { ETAT_INITIAL, type EtatForm } from "@/lib/admin/outils";
 
 import { BoiteDialogue } from "./BoiteDialogue";
-import { CaseAdmin, ChampAdmin, ChoixAdmin } from "./ChampsAdmin";
+import { CaseAdmin, ChampAdmin } from "./ChampsAdmin";
 import { BoutonAdmin, RetourForm } from "./ui";
 
 const LIBELLES_CHIFFRES = {
@@ -93,27 +93,6 @@ export function FormulaireReglages({ initial }: { initial: DonneesReglages }) {
       <RetourForm statut={etat.statut} message={etat.message} />
       <BoutonAdmin type="submit" className="self-start" disabled={enCours}>
         {enCours ? "Enregistrement…" : "Enregistrer les paramètres"}
-      </BoutonAdmin>
-    </form>
-  );
-}
-
-export function FormulaireInvitation() {
-  const [etat, action, enCours] = useActionState<EtatForm, FormData>(inviterAdmin, ETAT_INITIAL);
-  return (
-    <form action={action} className="flex flex-col gap-3">
-      <div className="grid gap-3 sm:grid-cols-2">
-        <ChampAdmin id="inv-email" name="email" type="email" libelle="E-mail *" required erreur={etat.erreurs?.email} />
-        <ChoixAdmin id="inv-role" name="role" libelle="Rôle" defaultValue="admin">
-          <option value="admin">Admin (contenus, adhérents, newsletter, modération)</option>
-          <option value="superadmin">Superadmin (tout, y compris comptes et paramètres)</option>
-        </ChoixAdmin>
-        <ChampAdmin id="inv-prenom" name="prenom" libelle="Prénom *" required erreur={etat.erreurs?.prenom} />
-        <ChampAdmin id="inv-nom" name="nom" libelle="Nom" />
-      </div>
-      <RetourForm statut={etat.statut} message={etat.message} />
-      <BoutonAdmin type="submit" className="self-start" disabled={enCours}>
-        {enCours ? "Envoi…" : "Envoyer l'invitation"}
       </BoutonAdmin>
     </form>
   );

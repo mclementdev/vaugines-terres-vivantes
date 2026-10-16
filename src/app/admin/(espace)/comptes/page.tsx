@@ -1,6 +1,7 @@
 import { changerRole, retirerAcces } from "@/app/admin/actions/parametres";
 import { BoutonSupprimer } from "@/components/admin/BoutonSupprimer";
-import { BoutonPurge, FormulaireInvitation, FormulaireReglages } from "@/components/admin/FormulairesParametres";
+import { BoutonLienConnexion, FormulaireCompte } from "@/components/admin/Comptes";
+import { BoutonPurge, FormulaireReglages } from "@/components/admin/FormulairesParametres";
 import { BoutonAdmin, CarteAdmin, EnTeteAdmin, Pastille, TableauAdmin } from "@/components/admin/ui";
 import { exigerSuperadmin } from "@/lib/auth";
 import type { Reglages } from "@/lib/data/site";
@@ -64,6 +65,7 @@ export default async function ComptesParametres(props: PageProps<"/admin/comptes
                   <span key="a" className="text-sm text-encre-3">—</span>
                 ) : (
                   <span key="a" className="flex flex-wrap gap-2">
+                    <BoutonLienConnexion id={p.id} />
                     <form action={changerRole.bind(null, p.id, p.role === "superadmin" ? "admin" : "superadmin")}>
                       <BoutonAdmin type="submit" variante="secondaire">
                         {p.role === "superadmin" ? "Passer admin" : "Passer superadmin"}
@@ -75,11 +77,12 @@ export default async function ComptesParametres(props: PageProps<"/admin/comptes
               ],
             }))}
           />
-          <h3 className="mb-2 mt-6 font-bold">Inviter une personne</h3>
+          <h3 className="mb-2 mt-6 font-bold">Ajouter une personne</h3>
           <p className="mb-3 text-sm text-encre-3">
-            Elle reçoit un e-mail pour activer son accès ; elle se connectera ensuite avec un lien envoyé par e-mail, sans mot de passe.
+            Un lien personnel est créé pour qu&apos;elle choisisse son mot de passe : il lui est envoyé par e-mail si l&apos;envoi est configuré, et
+            s&apos;affiche ici pour que vous puissiez le lui transmettre. Mot de passe oublié : « Envoyer un lien de connexion » sur sa ligne.
           </p>
-          <FormulaireInvitation />
+          <FormulaireCompte />
         </CarteAdmin>
 
         <CarteAdmin titre="Paramètres du site">

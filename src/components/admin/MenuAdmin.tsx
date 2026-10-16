@@ -65,6 +65,9 @@ function Pied({ nom, role, initiales }: Omit<Props, "groupes">) {
         <Link href="/" className="text-abricot-clair hover:text-white">
           Voir le site →
         </Link>
+        <Link href="/admin/mot-de-passe" className="text-creme underline-offset-4 hover:text-white hover:underline">
+          Mot de passe
+        </Link>
         <form action={seDeconnecter}>
           <button type="submit" className="cursor-pointer text-creme underline-offset-4 hover:text-white hover:underline">
             Se déconnecter

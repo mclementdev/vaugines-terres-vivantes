@@ -37,22 +37,26 @@ Studio (interface de la base) : http://127.0.0.1:54323
 
 ## Administration
 
-- Accès : `/admin`. Connexion par **lien magique** (pas de mot de passe), sans création de compte publique.
+- Accès : `/admin`. Connexion par **adresse e-mail et mot de passe** (12 caractères au moins, 10 essais par
+  quart d'heure et par appareil), sans création de compte publique ni « mot de passe oublié » en libre-service.
 - **Premier superadmin** (une seule fois, sur chaque environnement) :
 
   ```bash
   npm run admin:superadmin -- prenom.nom@exemple.fr "Prénom" "Nom"
   ```
 
-  La personne reçoit un e-mail d'invitation ; elle invite ensuite les autres admins depuis « Comptes & paramètres ».
+  Le script affiche un **lien personnel** (une heure, un seul usage) qui ouvre la session et mène au choix du mot
+  de passe (`/admin/mot-de-passe`). Aucun e-mail n'est nécessaire.
+- **Comptes** : le superadmin crée les comptes et, en cas d'oubli, produit un nouveau lien de connexion
+  (« Comptes & paramètres »). Le lien est généré côté serveur (`auth.admin.generateLink`, type `recovery`),
+  affiché au superadmin pour qu'il le transmette et envoyé par e-mail si l'envoi est configuré (Resend).
+  Chaque admin peut changer son mot de passe (lien « Mot de passe » en bas du menu).
 - En local, les e-mails arrivent dans Mailpit : http://127.0.0.1:54324 (rien ne part réellement).
 - **Rôles** : `superadmin` (tout, plus comptes, paramètres, purge des exemples, statuts) ; `admin` (contenus,
   adhérents, newsletter, modération). Contrôlés à trois niveaux : proxy (session), `exigerAdmin()` /
   `exigerSuperadmin()` dans chaque page et action, et RLS Postgres (y compris Storage). Un déclencheur
   empêche un admin de changer un rôle, et il reste toujours au moins un superadmin.
-- **Modèles d'e-mails d'authentification** : `supabase/templates/` (appliqués en local par `config.toml`).
-  En production, les recopier dans Supabase › Authentication › Email Templates (« Magic Link » et « Invite ») :
-  ils pointent vers `/auth/confirm?token_hash=…`.
+- Les e-mails d'authentification de Supabase ne servent pas : `supabase/templates/` n'est utile qu'en local.
 - Convention : chaque page de `src/app/admin/(espace)/` exporte `instant = false` (back-office toujours
   rendu à la requête) et commence par `await exigerAdmin()`.
 - Les textes riches sont nettoyés côté serveur (`sanitize-html`) avant enregistrement ; les images sont
@@ -135,10 +139,6 @@ bonnes pratiques et SEO 100.
       2026–2027 et les exemples fictifs des maquettes (`is_sample`), retirés plus tard en un clic (étape 4).
 - [ ] Authentication › Sign In / Providers : désactiver « Allow new users to sign up » ; garder l'e-mail activé.
 - [ ] Authentication › URL Configuration : Site URL `https://<domaine>` ; Redirect URLs `https://<domaine>/**`.
-- [ ] Authentication › Email Templates : recopier `supabase/templates/magic_link.html` (« Magic Link ») et
-      `invite.html` (« Invite user »).
-- [ ] Authentication › SMTP Settings : brancher Resend (hôte `smtp.resend.com`, port 465, utilisateur `resend`,
-      mot de passe = clé API Resend), expéditeur sur le domaine. Sans cela, Supabase limite les e-mails de connexion.
 - [ ] Vérifier dans Storage que les buckets `medias` et `idees` existent (créés par les migrations).
 
 ### 2. Resend et domaine
@@ -171,9 +171,10 @@ bonnes pratiques et SEO 100.
 ### 4. Premier superadmin et contenus
 
 - [ ] En local, avec un `.env.production.local` contenant les valeurs de production (jamais commité) :
-      `node --env-file=.env.production.local scripts/creer-superadmin.mjs prenom.nom@… "Prénom" "Nom"`.
-- [ ] Se connecter sur `https://<domaine>/admin`, puis dans « Comptes & paramètres » : coordonnées, e-mail
-      d'alerte, **IBAN et titulaire**, réseaux, signature ; inviter les autres admins.
+      `node --env-file=.env.production.local scripts/creer-superadmin.mjs prenom.nom@… "Prénom" "Nom"`,
+      puis ouvrir le lien affiché et choisir son mot de passe.
+- [ ] Dans « Comptes & paramètres » : coordonnées, e-mail d'alerte, **IBAN et titulaire**, réseaux, signature ;
+      créer les comptes des autres admins et leur transmettre leur lien.
 - [ ] Remplacer les contenus provisoires listés dans [`A_REMPLACER.md`](./A_REMPLACER.md), puis
       « Avant la mise en ligne › Tout supprimer » pour retirer les exemples fictifs.
 
@@ -183,7 +184,7 @@ bonnes pratiques et SEO 100.
       alerte reçue ; puis effacer la fiche (superadmin).
 - [ ] Inscription test à un événement, e-mail reçu, annulation ; dépôt d'une idée, modération.
 - [ ] Inscription à la lettre : confirmation puis désinscription.
-- [ ] Connexion admin par lien magique depuis un autre appareil.
+- [ ] Connexion admin par mot de passe depuis un autre appareil.
 - [ ] `https://<domaine>/robots.txt` et `/sitemap.xml` ; déclarer le sitemap dans Google Search Console.
 - [ ] Lighthouse mobile sur l'accueil (≥ 90) ; vérifier l'aperçu de partage (Open Graph) d'un article.
 - [ ] Les déploiements de prévisualisation Vercel ne sont pas indexés (robots `Disallow: /`) : rien à faire.

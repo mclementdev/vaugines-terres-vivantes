@@ -3,12 +3,11 @@ import { NextResponse, type NextRequest } from "next/server";
 
 import { clientSession } from "@/lib/supabase/serveur";
 
-const TYPES: EmailOtpType[] = ["magiclink", "invite", "email"];
+const TYPES: EmailOtpType[] = ["recovery", "magiclink", "invite", "email"];
 
 /**
- * Vérifie le lien reçu par e-mail et ouvre la session. Deux formats : `token_hash`
- * (modèles d'e-mails du dépôt) ou `code` (modèles par défaut de Supabase, lien ouvert
- * dans le navigateur qui a demandé la connexion).
+ * Vérifie un lien de connexion (créé par un superadmin, valable une heure, une seule
+ * fois) et ouvre la session ; `recovery` mène au choix du mot de passe.
  */
 export async function GET(request: NextRequest) {
   const { searchParams } = request.nextUrl;
@@ -21,12 +20,6 @@ export async function GET(request: NextRequest) {
   if (tokenHash && type && TYPES.includes(type)) {
     const supabase = await clientSession();
     const { error } = await supabase.auth.verifyOtp({ type, token_hash: tokenHash });
-    if (!error) return NextResponse.redirect(new URL(cible, request.url));
-  }
-  const code = searchParams.get("code");
-  if (code) {
-    const supabase = await clientSession();
-    const { error } = await supabase.auth.exchangeCodeForSession(code);
     if (!error) return NextResponse.redirect(new URL(cible, request.url));
   }
   return NextResponse.redirect(new URL("/admin/connexion?erreur=lien", request.url));
